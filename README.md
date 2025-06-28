@@ -50,7 +50,6 @@ Licensed under the **MIT License** – Free to use, just keep the credits 🙌
 
 # 🇫🇷 BeamMP-Web – Interface web de gestion pour serveurs BeamMP
 
-![Aperçu de l’interface](./docs/interface-preview.png) <!-- Remplacer par l'image réelle -->
 
 > 🔄 Ce projet est un **fork de [IxeYgrek/BeamMP-Web-Interface](https://github.com/IxeYgrek/BeamMP-Web-Interface)**  
 > créé initialement par IxeYgrek – un grand merci à lui pour sa base propre et inspirante 🙏  
