@@ -39,7 +39,7 @@ Reload privilege tables now? [Y/n]: Y
 
 ---
 
-## 👤 Étape 3 – Créer un utilisateur pour l'application / Create a user for the application
+## 👤 – Créer un utilisateur pour l'application / Create a user for the application
 
 Connecte-toi à MariaDB en root :  
 Log into MariaDB as root:

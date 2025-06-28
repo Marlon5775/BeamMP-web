@@ -33,15 +33,6 @@ Whether you're hosting a public server or a local private game, BeamMP-Web helps
 
 ---
 
-## 📌 Project Scope
-
-This repository contains only the **web interface**.  
-Setup guides, file structure details and database configuration will be available soon in a dedicated `docs/` folder.
-
-Stay tuned for tutorials and full installation steps!
-
----
-
 ## 👤 Author
 
 Project maintained by **[Zyphro3D](https://github.com/Zyphro3D)**  
@@ -89,15 +80,6 @@ Que vous hébergiez un serveur privé ou public, **BeamMP-Web vous simplifie l�
 - 📣 **Webhook de connexion / déconnexion** avec système de rangs personnalisés
 - 📊 **Webhook de rafraîchissement** avec état serveur en temps réel
 - 🔁 **Webhook lors de l’ajout de mod** depuis l’interface web
-
----
-
-## 📌 Portée du projet
-
-Ce dépôt contient uniquement l’**interface web**.  
-Les tutoriels d’installation, la structure complète et la configuration base de données seront bientôt disponibles dans un dossier `docs/`.
-
-Restez connectés pour les guides à venir !
 
 ---
 
