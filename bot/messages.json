@@ -1,0 +1,54 @@
+{
+  "static": {
+    "fr": {
+      "db_ok": "✅ Connexion à la base de données établie.",
+      "db_error": "❌ Erreur de connexion à la base : {error}",
+      "watching_log": "👀 Surveillance de {path} démarrée.",
+      "log_connection": "🟢 Connexion détectée : {username}",
+      "log_disconnection": "🔴 Déconnexion détectée : {username}",
+      "user_connected": "{username} s’est connecté.",
+      "user_disconnected": "{username} s’est déconnecté.",
+      "session_summary": "{username} s’est déconnecté. Temps de session : {session} | Total : {total}{msg}",
+      "discord_error": "⚠️ Erreur Discord : {status}",
+      "discord_fail": "❌ Erreur envoi Discord : {error}",
+      "discord_sent": "📨 Notification envoyée : {message}"
+    },
+    "en": {
+      "db_ok": "✅ Database connection established.",
+      "db_error": "❌ Database connection error: {error}",
+      "watching_log": "👀 Watching log file {path}.",
+      "log_connection": "🟢 Connection detected: {username}",
+      "log_disconnection": "🔴 Disconnection detected: {username}",
+      "user_connected": "{username} connected.",
+      "user_disconnected": "{username} disconnected.",
+      "session_summary": "{username} disconnected. Session time: {session} | Total: {total}{msg}",
+      "discord_error": "⚠️ Discord error: {status}",
+      "discord_fail": "❌ Discord sending error: {error}",
+      "discord_sent": "📨 Notification sent: {message}"
+    }
+  },
+  "connection_count": {
+    "fr": {
+      "0-1": ["🥚 Bienvenue pour ta toute première connexion !"],
+      "2-9": ["🥉 Niveau Bronze {value}/10"],
+      "10-99": ["🥈 Niveau Argent {value}/100"],
+      "100-499": ["🥇 Niveau Or avec {value}/500 connexions"],
+      "500+": ["💎 Niveau Platine ! {value} connexions, c'est du sérieux !"]
+    },
+    "en": {
+      "0-1": ["🥚 Welcome to your very first connection!"],
+      "2-9": ["🥉 Bronze Level {value}/10"],
+      "10-99": ["🥈 Silver Level {value}/100"],
+      "100-499": ["🥇 Gold Level with {value}/500 connections"],
+      "500+": ["💎 Platinum Level! {value} connections, that's serious!"]
+    }
+  },
+  "session_duration": {
+    "fr": {
+      "0-120": ["⚠️ Ça ne fonctionne pas ? Contacte le support admin."]
+    },
+    "en": {
+      "0-120": ["⚠️ Something wrong? Contact the admin support."]
+    }
+  }
+}

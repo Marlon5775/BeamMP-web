@@ -1,0 +1,11 @@
+{
+  "webhook_url": "https://discord.com/api/webhooks/1387656445595484220/C9bFexxgHl1kuvDTpoJSnvuZgKD00VpybvPXKq15K06fyk2U06eeUb052vtytEn6BfnI",
+  "logfile_path": "/home/beammp/BeamMP-Server/bin/Server.log",
+  "lang": "fr",
+  "db": {
+    "host": "localhost",
+    "user": "beammp_web",
+    "password": "beammp",
+    "database": "beammp_db"
+  }
+}
