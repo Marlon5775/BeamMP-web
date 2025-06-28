@@ -1,6 +1,6 @@
 # 🚗 BeamMP-Web – Web management interface for BeamMP servers
 
-![Interface Preview](./beammp-web.jpg)
+![Interface Preview](./docs/beammp-web.jpg)
 
 > 🔄 This project is a **fork of [IxeYgrek/BeamMP-Web-Interface](https://github.com/IxeYgrek/BeamMP-Web-Interface)**,  
 > initially built by IxeYgrek. Huge thanks to them for their clean and inspiring base!  
@@ -45,6 +45,8 @@ Open to suggestions, improvements, and community feedback.
 Licensed under the **MIT License** – Free to use, just keep the credits 🙌
 
 ---
+
+🇬🇧 [English tutorial](./docs/INSTALL_EN.md)
 
 ---
 
@@ -92,3 +94,7 @@ Suggestions, retours, et contributions sont les bienvenus.
 ## 📝 Licence
 
 Projet sous **licence MIT** – Libre d’utilisation, tant que les crédits sont conservés 🙌
+
+---
+
+🇫🇷 [Tutoriel en français](./docs/INSTALL_FR.md) 
