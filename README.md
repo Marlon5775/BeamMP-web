@@ -24,7 +24,7 @@ Whether you're hosting a public server or a local private game, BeamMP-Web helps
   > ⚠️ In local HTTP mode, webhook images may not display correctly
 - 📦 Add / remove **mods**, **maps**, and **vehicles**
 - ✅ Enable / disable mods and vehicles individually (just click on the image to toggle – greyed out means disabled)
-- 🗺️ **Live map switching** (no restart required)
+- 🗺️ **map switching** (restart required)
 - 📄 View **BeamMP server logs** directly from the interface
 - ⚙️ Edit the `serverConfig.toml` configuration file
 - 📣 **Connection/disconnection webhooks** with custom rank system
@@ -75,7 +75,7 @@ Que vous hébergiez un serveur privé ou public, **BeamMP-Web vous simplifie l�
   > ⚠️ En HTTP local, les images des webhooks ne s’affichent pas
 - 📦 **Ajout / suppression** de **mods**, **maps**, et **véhicules**
 - ✅ **Activation / désactivation** des mods et véhicules individuellement (il suffit de cliquer sur l’image pour activer ou désactiver – en gris = désactivé)
-- 🗺️ **Changement de map à la volée** (sans redémarrage)
+- 🗺️ **Changement de map** (redémarrage requis)
 - 📄 **Affichage des logs du serveur BeamMP**
 - ⚙️ **Édition du fichier `serverConfig.toml`**
 - 📣 **Webhook de connexion / déconnexion** avec système de rangs personnalisés
