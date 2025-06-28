@@ -6,8 +6,7 @@ This guide explains step-by-step how to install, secure, configure, and use the 
 
 ---
 
-## 📦 Étape 1 – Installer MariaDB Server  
-## 📦 Step 1 – Install MariaDB Server
+## 📦 – Installer MariaDB Server / Install MariaDB Server
 
 ```bash
 sudo apt update
@@ -16,8 +15,7 @@ sudo apt install mariadb-server -y
 
 ---
 
-## 🔐 Étape 2 – Sécuriser l’installation MariaDB  
-## 🔐 Step 2 – Secure MariaDB installation
+## 🔐 – Sécuriser l’installation MariaDB / Secure MariaDB installation 
 
 Lance le script de sécurisation :  
 Run the secure installation script:
@@ -41,8 +39,7 @@ Reload privilege tables now? [Y/n]: Y
 
 ---
 
-## 👤 Étape 3 – Créer un utilisateur pour l'application  
-## 👤 Step 3 – Create a user for the application
+## 👤 Étape 3 – Créer un utilisateur pour l'application / Create a user for the application
 
 Connecte-toi à MariaDB en root :  
 Log into MariaDB as root:
@@ -90,8 +87,7 @@ DB_PASSWORD=motdepassefort
 
 ---
 
-## 📥 Étape 4 – Importer la base de données fournie  
-## 📥 Step 4 – Import the provided database
+## 📥 – Importer la base de données fournie / Import the provided database
 
 Assure-toi d’avoir le fichier `beammp_db.sql` dans le dossier `sql/` du projet.  
 Make sure the `beammp_db.sql` file is in the project’s `sql/` directory.
@@ -142,8 +138,7 @@ Managed by the Python bot – connection history.
 
 ---
 
-## ✅ Étape 5 – Vérifications  
-## ✅ Step 5 – Verification
+## ✅ Étape 5 – Vérifications / Verification
 
 Tu peux tester la connexion manuellement :  
 You can test the connection manually:
@@ -158,14 +153,6 @@ Puis, dans MariaDB / Then inside MariaDB:
 SHOW TABLES;
 SELECT * FROM beammp LIMIT 5;
 ```
-
----
-
-## 🧩 Liens utiles / Useful links
-
-- 📘 [Documentation MariaDB](https://mariadb.com/kb/en/documentation/)
-- 📘 [Documentation PHP PDO](https://www.php.net/manual/fr/book.pdo.php)
-- 📄 Script bot connexion/déconnexion *(README séparé)* / Login tracking bot script *(separate README)*
 
 ---
 
