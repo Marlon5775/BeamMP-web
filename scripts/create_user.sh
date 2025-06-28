@@ -1,45 +1,58 @@
 #!/usr/bin/php
 <?php
-// CONFIGURATION DE LA BASE DE DONNÉES (en dur ici)
-$db_host = 'localhost';
-$db_name = 'beammp_db';
-$db_user = 'beammp_web';
-$db_pass = 'beammp';
+// Load config from JSON
+$configFile = __DIR__ . '/config.json';
+if (!file_exists($configFile)) {
+    echo "❌ Configuration file not found: $configFile" . PHP_EOL;
+    exit(1);
+}
 
+$config = json_decode(file_get_contents($configFile), true);
+if (!isset($config['db'])) {
+    echo "❌ Invalid config format." . PHP_EOL;
+    exit(1);
+}
+
+$db_host = $config['db']['host'];
+$db_name = $config['db']['name'];
+$db_user = $config['db']['user'];
+$db_pass = $config['db']['pass'];
+
+// Connect to the database
 try {
     $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8mb4", $db_user, $db_pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    echo "❌ Erreur connexion BDD : " . $e->getMessage() . PHP_EOL;
+    echo "❌ Database connection error: " . $e->getMessage() . PHP_EOL;
     exit(1);
 }
 
-// Fonction prompt CLI
+// CLI prompt function
 function prompt($text) {
     echo $text . ' ';
     return trim(fgets(STDIN));
 }
 
-// Demander les infos
-$username = prompt("Username :");
-$password = prompt("Password :");
-$role = prompt("Role (Admin ou SuperAdmin) :");
+// Ask user info
+$username = prompt("Username:");
+$password = prompt("Password:");
+$role = prompt("Role (Admin or SuperAdmin):");
 
-// Vérifier le rôle
+// Validate role
 $roleInput = strtolower(trim($role));
 if ($roleInput === 'superadmin') {
     $role = 'SuperAdmin';
 } elseif ($roleInput === 'admin') {
     $role = 'Admin';
 } else {
-    echo "❌ Rôle invalide ! Choisir 'Admin' ou 'SuperAdmin'." . PHP_EOL;
+    echo "❌ Invalid role! Choose 'Admin' or 'SuperAdmin'." . PHP_EOL;
     exit(1);
 }
 
-// Hasher le mot de passe
+// Hash password
 $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-// Insérer dans la table users
+// Insert into users table
 try {
     $stmt = $pdo->prepare("INSERT INTO users (username, password_hash, role) VALUES (:username, :password_hash, :role)");
     $stmt->execute([
@@ -48,8 +61,8 @@ try {
         ':role' => $role
     ]);
 
-    echo "✅ Utilisateur '$username' créé avec succès avec le rôle '$role'." . PHP_EOL;
+    echo "✅ User '$username' created successfully with role '$role'." . PHP_EOL;
 } catch (PDOException $e) {
-    echo "❌ Erreur lors de l'insertion : " . $e->getMessage() . PHP_EOL;
+    echo "❌ Insert error: " . $e->getMessage() . PHP_EOL;
     exit(1);
 }
