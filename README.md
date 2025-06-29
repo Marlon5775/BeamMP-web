@@ -43,7 +43,7 @@ Open to suggestions, improvements, and community feedback.
 ## 📝 License
 
 Licensed under the **MIT License** – Free to use, just keep the credits 🙌
-
+- ☕ [Buy me a coffee on Ko-fi](https://ko-fi.com/zyphro3D)
 ---
 
 🇬🇧 [English tutorial](./docs/INSTALL_EN.md)
@@ -94,7 +94,7 @@ Suggestions, retours, et contributions sont les bienvenus.
 ## 📝 Licence
 
 Projet sous **licence MIT** – Libre d’utilisation, tant que les crédits sont conservés 🙌
-
+- ☕ [Soutiens-moi avec un café sur Ko-fi](https://ko-fi.com/zyphro3D)
 ---
 
 🇫🇷 [Tutoriel en français](./docs/INSTALL_FR.md) 
