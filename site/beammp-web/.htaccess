@@ -1,0 +1,35 @@
+# Activer le moteur de réécriture
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Pas de redirection HTTPS automatique (on le gère ailleurs)
+
+    # Routes propres :
+    RewriteRule ^BeamMP$ /pages/BeamMP/BeamMP.php [L]
+    RewriteRule ^Upload$ /pages/BeamMP/upload.php [L]
+    RewriteRule ^Admin$ /pages/BeamMP/admin.php [L]
+    RewriteRule ^Acceuil$ /index.php [L]
+
+    # Rediriger tout ce qui n'existe pas vers index.php (SPA ?)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# Désactiver l'affichage des répertoires
+Options -Indexes
+
+# Bloquer l'accès direct aux fichiers sensibles
+<FilesMatch "(\.env|\.htaccess|\.json|composer\.(lock|json))">
+    Require all denied
+</FilesMatch>
+
+# Headers de sécurité
+<IfModule mod_headers.c>
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>

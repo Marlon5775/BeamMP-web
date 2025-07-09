@@ -1,0 +1,155 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f4f4f4;
+    height: 100%;
+    
+}
+
+/* Structure de la page */
+html, body {
+    height: 100%; /* S'assurer que la hauteur est 100% */
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1; /* Permet au contenu principal de s'étirer */
+    
+    flex-direction: column;
+    justify-content: center; /* Centre le contenu verticalement si nécessaire */
+    align-items: center; /* Centre horizontalement */
+}
+
+/* Boutons généraux */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.btn:hover {
+    background-color: rgb(44, 44, 44); /* Couleur plus claire au survol */
+    transform: scale(1.05); /* Légère mise en avant au survol */
+}
+/*-----------------------------*/
+/*--                         --*/
+/*--         HEADER          --*/
+/*--                         --*/
+/*-----------------------------*/
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    background-color: #444;
+    color: white; 
+    margin-bottom: 50px;
+}
+
+.headertitle {
+    font-size: 3rem; /* Taille de la police */
+    color: #ffffff; /* Couleur du texte */
+    text-align: center; /* Centrer le texte */
+    padding: 20px; /* Ajouter un peu d'espace autour du texte */
+    background: linear-gradient(145deg, #333333, #444444); /* Fond gris avec un léger dégradé */
+    border-radius: 10px; /* Bordures arrondies */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Ombre portée légère */
+    margin-top: 20px; /* Espacement du haut */
+    transition: transform 0.3s ease, background-color 0.3s ease, text-shadow 0.3s ease; /* Transitions douces */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1), 0 0 20px rgb(59, 58, 58); /* Effet néon léger */
+    animation: fadeIn 1s ease-out forwards;
+}
+/* Animation pour faire apparaître le titre progressivement */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px); /* Légère remontée pour l'apparition */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* style des bouton dans le header */
+.btn-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Espacement entre les boutons */
+    margin-top: 10px; /* Espace au-dessus des boutons */
+}
+
+.btn-link {
+    display: inline-block;
+    width: 50px; /* Largeur du bouton */
+    height: 50px; /* Hauteur du bouton */
+    text-decoration: none;
+}
+
+.btn-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Redimensionne l'icône pour qu'elle s'adapte au bouton */
+}
+
+/* Message de bienvenue */
+.user-logged-in {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+/* Cible (anchor) */
+:target {
+    display: block;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.btn-logout {
+    background-color: #cc0b0b;
+    color: #fff;
+}
+.btn-logout:hover{
+    background-color:rgb(255, 56, 56) ;
+}
+.language-selector {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 0.9rem;
+}
+
+.language-selector a {
+    color: inherit;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.language-selector a:hover {
+    text-decoration: underline;
+}
+
+/*-----------------------------*/
+/*--                         --*/
+/*--         FOOTER          --*/
+/*--                         --*/
+/*-----------------------------*/
+
+footer {
+    text-align: center;
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+    
+    bottom: 0;
+}

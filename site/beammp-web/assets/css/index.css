@@ -1,0 +1,287 @@
+/* Structure de base pour Flexbox */
+html, body {
+    height: 100%; /* Important pour que le wrapper prenne toute la hauteur */
+    margin: 0; /* Pas de marges */
+    display: flex;
+    flex-direction: column;
+}
+
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 94vh; /* La page remplit toute la hauteur de la fenêtre */
+}
+
+/* Conteneur principal */
+.main-container {
+    flex: 1; /* Étend le contenu principal pour remplir l'espace */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    padding: 20px;
+    margin: 40px;
+}
+
+/* Conteneur principal de bienvenue */
+.welcome-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.welcome-container h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.welcome-container p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    color: #555;
+}
+
+.welcome-container ul {
+    text-align: left;
+    margin: 20px 0;
+    padding-left: 20px;
+}
+
+.welcome-container li {
+    font-size: 1rem;
+    margin-bottom: 15px;
+    color: #444;
+    line-height: 1.6;
+}
+
+.welcome-container strong {
+    font-size: 1.2rem;
+    color: #000;
+}
+
+.welcome-container em {
+    color: #007bff;
+    font-style: italic;
+}
+
+.welcome-container a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.welcome-container a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+
+/* Section des boutons cliquables */
+.clickable-container {
+    display: flex;
+    gap: 200px;
+    margin: auto auto;
+}
+
+.clickable-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    width: auto;
+    height: auto;
+}
+
+.clickable-box:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.clickable-box img {
+    width: 300px;
+    height: auto;
+    object-fit: cover;
+}
+
+.clickable-box h2 {
+    font-size: 1.5rem;
+    margin: 10px 0;
+    color: #333;
+}
+
+/* Modale de connexion */
+/* Fond semi-transparent de la modale */
+.dialogue-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Fond sombre avec opacité */
+    z-index: 1000;
+    display: none; /* Par défaut, la modale est cachée */
+}
+
+/* Boîte de dialogue */
+.dialogue-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Ombre légère */
+    z-index: 1001;
+    text-align: center;
+    display: none; /* Par défaut, la modale est cachée */
+    animation: fadeIn 0.3s ease-out; /* Animation d'apparition */
+}
+
+/* Bouton Fermer */
+.dialogue-box .btn-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #333;
+    cursor: pointer;
+    transition: transform 0.2s, color 0.2s;
+}
+
+.dialogue-box .btn-close:hover {
+    color: #007BFF;
+    transform: scale(1.2); /* Agrandir légèrement au survol */
+}
+
+/* Titre de la modale */
+.dialogue-box h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Champs de formulaire */
+.dialogue-box input {
+    width: 100%;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.dialogue-box input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+/* Champ mot de passe avec bouton affichage */
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-container input[type="password"], 
+.password-container input[type="text"] {
+    padding-right: 40px; /* Espace pour le bouton d'affichage */
+}
+
+.password-container .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    color: #007BFF;
+    padding: 0;
+    margin: 0;
+    top: 20px;
+}
+
+/* Bouton Connexion */
+.dialogue-box .btn-submit {
+    width: 100%;
+    padding: 10px 20px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.dialogue-box .btn-submit:hover {
+    background-color: rgb(0, 212, 0);
+    transform: scale(1.05); /* Effet léger d'agrandissement */
+}
+
+/* Message d'erreur */
+.dialogue-box .error-message {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    display: none; /* Masqué par défaut */
+}
+
+
+
+
+.user-login .btn-login {
+    background-color: rgb(0, 180, 0);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.user-login .btn-login:hover {
+    background-color: rgb(0, 226, 0);
+}
+/* Animation pour faire apparaître le modal */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+.headertitle {
+    transform: none !important;
+}
+
+/* Footer toujours en bas */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    flex-shrink: 0; /* Empêche le footer de rétrécir */
+}

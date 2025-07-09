@@ -1,0 +1,60 @@
+/* Corps de la page */
+body {
+    background-color: #f4f4f4; /* Fond clair */
+    color: #333; /* Texte gris foncé */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6; /* Espacement entre les lignes pour la lisibilité */
+}
+
+/* Conteneur principal */
+.container {
+    max-width: 800px; /* Largeur maximale de 800px */
+    margin: 50px auto; /* Centré horizontalement et espacements en haut/bas */
+    background: #fff; /* Fond blanc */
+    padding: 20px;
+    border-radius: 8px; /* Coins arrondis */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+}
+
+/* Titres principaux */
+h1, h2 {
+    color: #444; /* Gris légèrement plus foncé */
+    text-align: center; /* Centré */
+    margin-bottom: 20px; /* Espacement sous les titres */
+}
+
+/* Paragraphes */
+p {
+    margin: 10px 0; /* Espacement vertical */
+}
+
+/* Listes */
+ul {
+    padding-left: 20px; /* Indentation pour les listes */
+}
+
+ul li {
+    margin: 10px 0; /* Espacement entre les éléments */
+}
+
+/* Lien dans le fichier */
+a {
+    color: #007bff; /* Bleu pour les liens */
+    text-decoration: none; /* Pas de soulignement */
+    transition: color 0.3s ease; /* Animation fluide */
+}
+
+a:hover {
+    color: #0056b3; /* Bleu plus foncé au survol */
+    text-decoration: underline; /* Soulignement au survol */
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px; /* Taille de police réduite */
+    color: #666; /* Texte gris clair */
+}

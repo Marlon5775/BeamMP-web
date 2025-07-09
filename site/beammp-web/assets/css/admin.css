@@ -1,0 +1,148 @@
+/* Admin V2 propre */
+
+/* LOGS */
+.log-container {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    border: 1px solid #ddd;
+    max-width: 1200px;
+}
+
+.scrollbox {
+    height: 400px;
+    overflow-y: auto;
+    padding: 12px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.scrollbox pre {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    color: #333;
+    white-space: pre-wrap;
+    margin: 0;
+}
+
+/* FORMULAIRE */
+.config-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.15);
+    border: 1px solid #ddd;
+    margin: 30px auto 50px;
+    width: 600px;
+}
+
+.config-form .form-group {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.config-form .form-group label {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+    color: #333;
+}
+
+.config-form .form-group input[type="text"],
+.config-form .form-group input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+    margin-top: 5px;
+    transition: all 0.2s ease;
+}
+
+input.editable {
+    background-color: #e9ffe9;
+    border-color: #21cc4c;
+}
+
+input.non-editable {
+    background-color: #f5f5f5;
+    border-color: #ddd;
+    color: #999;
+    cursor: not-allowed;
+}
+
+/* SAVE BUTTON */
+.btn-save {
+    margin-top: 8px;
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    background-color: #1eb41e;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-save:hover {
+    background-color: #0056b3;
+}
+
+button[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* SWITCHES */
+.switch-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.switch-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.switch-label {
+    margin-left: 8px;
+    flex-grow: 1;
+}
+
+h2 {
+    font-size: 2.2rem;
+    color: #fff;
+    background: linear-gradient(145deg, #333, #444);
+    text-align: center;
+    padding: 18px;
+    border-radius: 8px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+    margin: 30px auto 20px;
+    max-width: 1200px;
+    text-shadow: 0 0 5px rgba(255,255,255,0.1), 0 0 10px #3b3a3a;
+    animation: fadeIn 1s ease-out forwards;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .config-form {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .btn-save {
+        width: 100%;
+    }
+}

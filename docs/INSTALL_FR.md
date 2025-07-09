@@ -25,10 +25,14 @@ cd BeamMP-web
 
 ## 3️⃣ Installation du site web
 
-### Décompression de l'archive
+### Copie des fichiers et installation des dépendances
+
+Copiez le dossier `site/beammp-web` dans `/var/www/beammp-web`, puis installez les dépendances PHP avec Composer :
 
 ```bash
-sudo tar -xzf site/beammp-web.tar.gz -C /var/www/
+sudo cp -r site/beammp-web /var/www/beammp-web
+cd /var/www/beammp-web
+composer install
 ```
 
 ### Activation du site Apache
