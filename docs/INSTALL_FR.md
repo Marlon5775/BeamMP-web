@@ -32,12 +32,13 @@ Copiez le dossier `site/beammp-web` dans `/var/www/beammp-web`, puis installez l
 ```bash
 sudo cp -r site/beammp-web /var/www/beammp-web
 cd /var/www/beammp-web
-composer install
+sudo composer install
 ```
 
 ### Activation du site Apache
 
 ```bash
+cd ~/BeamMP-web
 sudo cp config/beammp-web.conf /etc/apache2/sites-available/
 sudo a2dissite 000-default.conf (si le site par default est toujours actif)
 sudo a2ensite beammp-web.conf
@@ -206,7 +207,7 @@ sudo chmod g+s /home/xxxx/BeamMP-Server/bin/Resources/ (Remplacer les xxxx par v
 ### Adaptation et activation
 
 ```bash
-sudo cp service/*.service /etc/systemd/system/ (Modifier les 2 .services en fonction de votre utilisateur système)
+sudo cp services/*.service /etc/systemd/system/ (Modifier les 2 .services en fonction de votre utilisateur système)
 sudo systemctl daemon-reexec
 sudo systemctl daemon-reload
 sudo systemctl enable BeamMP.service joueurs.service

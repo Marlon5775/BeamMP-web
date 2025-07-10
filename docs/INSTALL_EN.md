@@ -32,12 +32,13 @@ Copy the `site/beammp-web` folder to `/var/www/beammp-web`, then install PHP dep
 ```bash
 sudo cp -r site/beammp-web /var/www/beammp-web
 cd /var/www/beammp-web
-composer install
+sudo composer install
 ```
 
 ### Enable Apache site
 
 ```bash
+cd ~/BeamMP-web
 sudo cp config/beammp-web.conf /etc/apache2/sites-available/
 sudo a2dissite 000-default.conf  # If the default site is still enabled
 sudo a2ensite beammp-web.conf
@@ -206,7 +207,7 @@ sudo chmod g+s /home/xxxx/BeamMP-Server/bin/Resources/
 ### Configure and enable
 
 ```bash
-sudo cp service/*.service /etc/systemd/system/  # Edit the .service files for your username
+sudo cp services/*.service /etc/systemd/system/  # Edit the .service files for your username
 sudo systemctl daemon-reexec
 sudo systemctl daemon-reload
 sudo systemctl enable BeamMP.service joueurs.service
