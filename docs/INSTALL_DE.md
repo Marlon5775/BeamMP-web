@@ -197,7 +197,7 @@ sudo chmod g+rw /home/xxxx/BeamMP-Server/bin/ServerConfig.toml
 
 ```bash
 sudo chmod -R g+w /home/xxxx/BeamMP-Server/bin/Resources/
-sudo chgrp -R www-data /xxxx/beammp/BeamMP-Server/bin/Resources/
+sudo chgrp -R www-data /home/xxxx/beammp/BeamMP-Server/bin/Resources/
 sudo chmod g+s /home/xxxx/BeamMP-Server/bin/Resources/
 ```
 
