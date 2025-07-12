@@ -10,7 +10,7 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
 $dotenv->load();
 
 // Langues supportées
-$supported_langs = ['fr', 'en'];
+$supported_langs = ['fr', 'en', 'de'];
 $defaultLang = $_ENV['LANG_DEFAULT'] ?? 'en';
 
 // Détection navigateur
