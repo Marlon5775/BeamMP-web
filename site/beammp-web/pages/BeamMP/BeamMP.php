@@ -19,7 +19,6 @@ $h1Title = 'BeamMP';
 $buttons = [
     ['link' => '/Upload', 'title' => t('btn_add_mod'), 'icon' => '/assets/images/ADD.png'],
     ['link' => '/Admin', 'title' => t('btn_logs'), 'icon' => '/assets/images/LOG.png'],
-    ['link' => '/Acceuil', 'title' => t('btn_back'), 'icon' => '/assets/images/BACK.png']
 ];
 ?>
 <!DOCTYPE html>

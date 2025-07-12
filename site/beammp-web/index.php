@@ -1,8 +1,9 @@
 <?php
+// Sécurisation avancée des cookies de session
 $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
 session_set_cookie_params([
     'httponly' => true,
-    'secure' => $isHttps,
+    'secure'   => $isHttps,
     'samesite' => 'Strict',
 ]);
 
@@ -10,8 +11,17 @@ ini_set('session.cookie_secure', $isHttps ? '1' : '0');
 ini_set('session.cookie_httponly', '1');
 ini_set('session.cookie_samesite', 'Strict');
 
+// Démarrage session OBLIGATOIRE AVANT vérif/redirection
+session_start();
+
 require_once __DIR__ . '/includes/BeamMP/i18n.php';
 require_once __DIR__ . '/includes/roles.php';
+
+// --- Redirection automatique si connecté ---
+if (isset($_SESSION['user_id'])) {
+    header('Location: /pages/BeamMP/BeamMP.php');
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="<?= $lang ?>">
@@ -36,15 +46,6 @@ require_once __DIR__ . '/includes/roles.php';
     ?>
 
     <main class="main-container">
-        <?php if (isset($_SESSION['user_id'])): ?>
-            <!-- Section visible après connexion -->
-            <section class="clickable-container">
-                <a href="pages/BeamMP/BeamMP.php" class="clickable-box">
-                    <img src="assets/images/BeamMP.jpg" alt="Lien vers la page BeamMP">
-                </a>
-            </section>
-        <?php else: ?>
-                      
             <!-- Section visible avant connexion -->
             <div class="welcome-container">
         <h2><?= t('welcome_h2') ?></h2>
@@ -59,7 +60,6 @@ require_once __DIR__ . '/includes/roles.php';
             
         </ul>
     </div>
-    <?php endif; ?>
     </main>
 
     <!-- Modale de Connexion -->

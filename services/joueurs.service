@@ -5,8 +5,8 @@ After=network.target
 [Service]
 Type=simple
 User=beammp
-WorkingDirectory=/home/beammp/script/
-ExecStart=/home/beammp/script/joueurs.out
+WorkingDirectory=/home/beammp/bot/
+ExecStart=/home/beammp/bot/joueurs.out
 
 Restart=on-failure
 RestartSec=3
