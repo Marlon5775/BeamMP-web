@@ -98,3 +98,53 @@ Projet sous **licence MIT** – Libre d’utilisation, tant que les crédits son
 ---
 
 🇫🇷 [Tutoriel en français](./docs/INSTALL_FR.md) 
+
+---
+
+# 🇩🇪 BeamMP-Web – Webverwaltungsoberfläche für BeamMP-Server
+
+> 🔄 Dieses Projekt ist ein **Fork von [IxeYgrek/BeamMP-Web-Interface](https://github.com/IxeYgrek/BeamMP-Web-Interface)**,  
+> ursprünglich entwickelt von IxeYgrek. Vielen Dank für die saubere und inspirierende Basis!  
+> 🤖 Diese überarbeitete Version entstand mit der kontinuierlichen Hilfe von **ChatGPT** im Rahmen einer vollständigen Anpassung.
+
+---
+
+## 🌐 Was ist BeamMP-Web?
+
+**BeamMP-Web** ist eine schlanke, mehrsprachige und sichere **Weboberfläche** zur Verwaltung deines **BeamMP-Servers** – egal ob lokal oder aus der Ferne.  
+Das Ziel ist es, die Serververwaltung zu vereinfachen und trotzdem die volle Kontrolle über Mods, Maps, Konfigurationen und den Serverstatus zu behalten.
+
+Egal ob du einen öffentlichen Server oder ein privates Spiel hostest, BeamMP-Web hilft dir, **alles zentral zu steuern**.
+
+---
+
+## ✨ Aktuelle Funktionen
+
+- 🔐 **Sicheres Login-System**
+- 🌍 Funktioniert über **lokales HTTP** oder **HTTPS mit eigener Domain**
+  > ⚠️ Im lokalen HTTP-Modus werden Webhook-Bilder eventuell nicht korrekt angezeigt
+- 📦 **Mods**, **Maps** und **Fahrzeuge** hinzufügen/entfernen
+- ✅ Mods und Fahrzeuge einzeln aktivieren/deaktivieren (einfach auf das Bild klicken – ausgegraut = deaktiviert)
+- 🗺️ **Map-Wechsel** (Neustart erforderlich)
+- 📄 **BeamMP-Server-Logs** direkt in der Oberfläche anzeigen
+- ⚙️ Die Konfigurationsdatei `serverConfig.toml` bearbeiten
+- 📣 **Webhooks für Verbindungen/Trennungen** mit individuellem Rangsysten
+- 📊 **Live-Serverstatus-Webhooks** (Status-Feedback)
+- 🔁 **Webhook bei Mod-Upload** über die Weboberfläche
+
+---
+
+## 👤 Autor
+
+Projekt gepflegt von **[Zyphro3D](https://github.com/Zyphro3D)**  
+Vorschläge, Verbesserungen und Community-Feedback sind willkommen.
+
+---
+
+## 📝 Lizenz
+
+Lizenziert unter der **MIT-Lizenz** – Frei verwendbar, solange die Credits erhalten bleiben 🙌
+- ☕ [Kauf mir einen Kaffee auf Ko-fi](https://ko-fi.com/zyphro3D)
+---
+
+🇩🇪 [Deutsches Tutorial](./docs/INSTALL_DE.md)

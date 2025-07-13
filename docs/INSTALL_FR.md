@@ -128,7 +128,7 @@ DISCORD_WEBHOOK_SERVER_RESTART=https://discord.com/api/webhooks/xxxx (remplacer 
 
 # Autres
 BASE_URL=http://192.xxx.xxx.xxx (à remplacer par votre ip)
-LANG_DEFAULT=fr  # ou 'en' pour anglais
+LANG_DEFAULT=fr  # ou 'en' pour anglais ou 'de' pour allemand
 ```
 
 ---

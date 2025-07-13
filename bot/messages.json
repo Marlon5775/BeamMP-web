@@ -25,6 +25,19 @@
       "discord_error": "⚠️ Discord error: {status}",
       "discord_fail": "❌ Discord sending error: {error}",
       "discord_sent": "📨 Notification sent: {message}"
+    },
+    "de": {
+      "db_ok": "✅ Datenbankverbindung hergestellt.",
+      "db_error": "❌ Datenbankverbindungsfehler: {error}",
+      "watching_log": "👀 Überwache Protokolldatei {path}.",
+      "log_connection": "🟢 Verbindung erkannt: {username}",
+      "log_disconnection": "🔴 Trennung erkannt: {username}",
+      "user_connected": "{username} verbunden.",
+      "user_disconnected": "{username} getrennt.",
+      "session_summary": "{username} getrennt. Sitzungszeit: {session} | Gesamt: {total}{msg}",
+      "discord_error": "⚠️ Discord Fehler: {status}",
+      "discord_fail": "❌ Discord Sende Fehler: {error}",
+      "discord_sent": "📨 Benachrichtigung gesendet: {message}"
     }
   },
   "connection_count": {
@@ -41,6 +54,13 @@
       "10-99": ["🥈 Silver Level {value}/100"],
       "100-499": ["🥇 Gold Level with {value}/500 connections"],
       "500+": ["💎 Platinum Level! {value} connections, that's serious!"]
+    },
+    "de": {
+      "0-1": ["🥚 Willkommen zu deiner allerersten Verbindung!"],
+      "2-9": ["🥉 Bronze Level {value}/10"],
+      "10-99": ["🥈 Silber Level {value}/100"],
+      "100-499": ["🥇 Gold Level mit {value}/500 Verbindungen"],
+      "500+": ["💎 Platin Level! {value} Verbindungen, das ist ernsthaft!"]
     }
   },
   "session_duration": {
@@ -49,6 +69,9 @@
     },
     "en": {
       "0-120": ["⚠️ Something wrong? Contact the admin support."]
+    },
+    "de": {
+      "0-120": ["⚠️ Etwas stimmt nicht? Kontaktiere den Admin-Support."]
     }
   }
 }
