@@ -9,7 +9,7 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
 $dotenv->load();
 
 // Chargement de la langue et des traductions
-$supported_langs = ['fr', 'en'];
+$supported_langs = ['fr', 'en', 'de'];
 $lang = $_SESSION['lang'] ?? $_COOKIE['lang'] ?? $_ENV['LANG_DEFAULT'] ?? 'en';
 if (!in_array($lang, $supported_langs)) $lang = 'en';
 $translationFile = __DIR__ . "/../../includes/BeamMP/lang/{$lang}.php";
