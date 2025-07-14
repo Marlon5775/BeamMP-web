@@ -25,13 +25,13 @@ cd BeamMP-web
 
 ## 3️⃣ Installation du site web
 
-### Copie des fichiers et installation des dépendances
+### Création lien symbolique des fichiers et installation des dépendances
 
-Copiez le dossier `site/beammp-web` dans `/var/www/beammp-web`, puis installez les dépendances PHP avec Composer :
+Créer un lien symbolique entre le dossier `site/beammp-web` et `/var/www/beammp-web`, puis installez les dépendances PHP avec Composer :
 
 ```bash
-sudo cp -r site/beammp-web /var/www/beammp-web
-cd /var/www/beammp-web
+sudo ln -s ~/BeamMP-web/site/beammp-web /var/www/beammp-web
+cd site/beammp-web/
 sudo composer install
 ```
 
@@ -40,7 +40,8 @@ sudo composer install
 ```bash
 cd ~/BeamMP-web
 sudo cp config/beammp-web.conf /etc/apache2/sites-available/
-sudo a2dissite 000-default.conf (si le site par default est toujours actif)
+# (Optionnel) Désactiver le site Apache par défaut si encore actif
+sudo a2dissite 000-default.conf
 sudo a2ensite beammp-web.conf
 sudo a2enmod rewrite
 sudo systemctl reload apache2
@@ -71,7 +72,7 @@ sudo systemctl restart apache2
 ### Sécurisation de MariaDB
 
 ```bash
-sudo mysql_secure_installation (suivez les informations jusqu'a la fin)
+sudo mysql_secure_installation
 ```
 
 ### Import du schéma et droits
@@ -84,11 +85,18 @@ sudo mysql -u root -p
 Dans le shell MariaDB :
 
 ```sql
-CREATE USER 'USER'@'localhost' IDENTIFIED BY 'PASSWORD'; (modifier l'USER et le PASSWORD, gardez le ça va servir)
-GRANT ALL PRIVILEGES ON beammp_db.beammp TO 'USER'@'localhost'; (remplacer USER par celui créé au dessus)
-GRANT ALL PRIVILEGES ON beammp_db.beammp_users TO 'USER'@'localhost'; (remplacer USER par celui créé au dessus)
-GRANT ALL PRIVILEGES ON beammp_db.users TO 'USER'@'localhost'; (remplacer USER par celui créé au dessus)
+-- Créer l'utilisateur (remplacer USER et PASSWORD par les vôtres)
+CREATE USER 'USER'@'localhost' IDENTIFIED BY 'PASSWORD';
+
+-- Donner les droits sur les tables nécessaires (remplacer USER par le vôtre)
+GRANT ALL PRIVILEGES ON beammp_db.beammp TO 'USER'@'localhost';
+GRANT ALL PRIVILEGES ON beammp_db.beammp_users TO 'USER'@'localhost';
+GRANT ALL PRIVILEGES ON beammp_db.users TO 'USER'@'localhost';
+
+-- Appliquer les changements
 FLUSH PRIVILEGES;
+
+-- Quitter le shell MariaDB
 EXIT;
 ```
 
@@ -108,27 +116,27 @@ Voici le **modèle à utiliser** :
 # Base de données locale
 DB_HOST=localhost
 DB_NAME=beammp_db
-DB_USER=xxxxxx (à remplacer par l'USER de la base de donnée)
-DB_PASSWORD=xxxxxxx (à remplacer par le PASSWORD de la base de donnée)
+DB_USER=USER         # Remplacer USER par le nom de l'utilisateur MariaDB
+DB_PASSWORD=PASSWORD # Remplacer PASSWORD par le mot de passe de l'utilisateur
 
-# Chemin vers le fichier de configuration distant
-CONFIG_REMOTE_PATH=/home/xxxxxxx/BeamMP-Server/bin/ServerConfig.toml (Remplacer les xxxx par votre utilisateur système)
-LOG_FILE_PATH=/home/xxxxxxx/BeamMP-Server/bin/Server.log (Remplacer les xxxx par votre utilisateur système)
+# Chemins vers les fichiers du serveur BeamMP
+CONFIG_REMOTE_PATH=/home/USER/BeamMP-Server/bin/ServerConfig.toml  # Remplacer USER par votre nom d'utilisateur système
+LOG_FILE_PATH=/home/USER/BeamMP-Server/bin/Server.log               # Idem
 USER_CHANGE=www-data
 
 # Chemins principaux
-BEAMMP_FOLDER=/home/xxxxxxx/BeamMP-Server/bin/Resources/ (Remplacer les xxxx par votre utilisateur système)
-PATH_RESOURCES=/home/xxxxxxx/BeamMP-Server/bin/Resources/ (Remplacer les xxxx par votre utilisateur système)
-BASE_PATH=/var/www/beammp-web
-SERVERCONFIG_PATH=/home/xxxxxxx/BeamMP-Server/bin/ServerConfig.toml (Remplacer les xxxx par votre utilisateur système)
+BEAMMP_FOLDER=/home/USER/BeamMP-Server/bin/Resources/               # Répertoire racine des mods
+PATH_RESOURCES=/home/USER/BeamMP-Server/bin/Resources/              # identique à BEAMMP_FOLDER
+BASE_PATH=/var/www/beammp-web                                       # Chemin d’installation du site web
+SERVERCONFIG_PATH=/home/USER/BeamMP-Server/bin/ServerConfig.toml    # Chemin vers la config serveur
 
 # Webhooks Discord
-DISCORD_WEBHOOK_MOD_UPLOAD=https://discord.com/api/webhooks/xxxx (remplacer par le lien de votre webhook pour le salon upload)
-DISCORD_WEBHOOK_SERVER_RESTART=https://discord.com/api/webhooks/xxxx (remplacer par le lien de votre webhook pour le salon information serveur)
+DISCORD_WEBHOOK_MOD_UPLOAD=https://discord.com/api/webhooks/xxxx   # Lien vers le webhook du salon d’upload
+DISCORD_WEBHOOK_SERVER_RESTART=https://discord.com/api/webhooks/xxx # Lien vers le webhook pour le statut serveur
 
-# Autres
-BASE_URL=http://192.xxx.xxx.xxx (à remplacer par votre ip)
-LANG_DEFAULT=fr  # ou 'en' pour anglais ou 'de' pour allemand
+# Autres paramètres
+BASE_URL=http://192.xxx.xxx.xxx     # IP locale ou domaine
+LANG_DEFAULT=fr                     # Langue par défaut : fr, en, de
 ```
 
 ---
@@ -180,24 +188,37 @@ mkdir -p ~/BeamMP-Server/bin/Resources/inactive_mods
 ### Groupe et accès Apache
 
 ```bash
-sudo adduser www-data USER ( à remplacer par l'utilisateur système)
+#Remplacer USER par le votre
+sudo adduser www-data USER 
 ```
 
 ### Accès au `ServerConfig.toml`
 
 ```bash
-sudo chmod g+rx /home/xxxx (Remplacer les xxxx par votre utilisateur système)
-sudo chmod g+rx /home/xxxx/BeamMP-Server (Remplacer les xxxx par votre utilisateur système)
-sudo chmod g+wx /home/xxxx/BeamMP-Server/bin (Remplacer les xxxx par votre utilisateur système)
-sudo chmod g+rw /home/xxxx/BeamMP-Server/bin/ServerConfig.toml (Remplacer les xxxx par votre utilisateur système)
+# Autoriser www-data à lire le dossier personnel de l'utilisateur
+sudo chmod g+rx /home/USER        # Remplacer USER par votre nom d’utilisateur système
+
+# Autoriser www-data à lire le dossier BeamMP-Server
+sudo chmod g+rx /home/USER/BeamMP-Server
+
+# Autoriser www-data à écrire dans le dossier /bin (pour les fichiers générés/modifiés)
+sudo chmod g+wx /home/USER/BeamMP-Server/bin
+
+# Autoriser www-data à lire et écrire le fichier ServerConfig.toml
+sudo chmod g+rw /home/USER/BeamMP-Server/bin/ServerConfig.toml
 ```
 
 ### Accès aux ressources mods/maps
 
 ```bash
-sudo chmod -R g+w /home/xxxx/BeamMP-Server/bin/Resources/ (Remplacer les xxxx par votre utilisateur système)
-sudo chgrp -R www-data /xxxx/beammp/BeamMP-Server/bin/Resources/ (Remplacer les xxxx par votre utilisateur système)
-sudo chmod g+s /home/xxxx/BeamMP-Server/bin/Resources/ (Remplacer les xxxx par votre utilisateur système)
+# Autoriser le groupe (www-data) à écrire dans tous les fichiers/dossiers de Resources
+sudo chmod -R g+w /home/USER/BeamMP-Server/bin/Resources/  # Remplacer USER par votre nom d’utilisateur système
+
+# Changer le groupe propriétaire en www-data pour tous les fichiers/dossiers
+sudo chgrp -R www-data /home/USER/BeamMP-Server/bin/Resources/
+
+# Activer le bit "setgid" pour que les nouveaux fichiers héritent du groupe www-data
+sudo chmod g+s /home/USER/BeamMP-Server/bin/Resources/
 ```
 
 ---
@@ -207,7 +228,8 @@ sudo chmod g+s /home/xxxx/BeamMP-Server/bin/Resources/ (Remplacer les xxxx par v
 ### Adaptation et activation
 
 ```bash
-sudo cp services/*.service /etc/systemd/system/ (Modifier les 2 .services en fonction de votre utilisateur système)
+#Modifier les deux .services en fonction de votre utilisateur système
+sudo cp services/*.service /etc/systemd/system/
 sudo systemctl daemon-reexec
 sudo systemctl daemon-reload
 sudo systemctl enable BeamMP.service joueurs.service

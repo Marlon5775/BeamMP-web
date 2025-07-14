@@ -26,13 +26,13 @@ cd BeamMP-web
 
 ## 3️⃣ Website einrichten
 
-### Dateien kopieren und Abhängigkeiten installieren
+### Dateien verlinken und Abhängigkeiten installieren
 
-Kopiere den Ordner `site/beammp-web` nach `/var/www/beammp-web` und installiere dann die PHP-Abhängigkeiten mit Composer:
+Erstelle einen symbolischen Link von `site/beammp-web` nach `/var/www/beammp-web` und installiere dann die PHP-Abhängigkeiten mit Composer:
 
 ```bash
-sudo cp -r site/beammp-web /var/www/beammp-web
-cd /var/www/beammp-web
+sudo ln -s ~/BeamMP-web/site/beammp-web /var/www/beammp-web
+cd site/beammp-web
 sudo composer install
 ```
 

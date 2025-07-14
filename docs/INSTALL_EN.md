@@ -1,10 +1,10 @@
 # 📦 Installation of BeamMP-web + Bot + Scripts (Apache + MariaDB)
 
-This guide walks you step-by-step through installing the BeamMP-web project (server management interface + Discord bot + sync scripts) on a Debian/Ubuntu server using Apache and MariaDB.
+This tutorial guides you step by step to install the BeamMP-web project (server management interface + Discord bot + synchronization scripts) on a Debian/Ubuntu server with Apache and MariaDB.
 
 ---
 
-## 1️⃣ Requirements
+## 1️⃣ Prerequisites
 
 ```bash
 sudo apt update && sudo apt install -y \
@@ -23,24 +23,25 @@ cd BeamMP-web
 
 ---
 
-## 3️⃣ Website setup
+## 3️⃣ Web site setup
 
-### Copy files and install dependencies
+### Create symbolic link and install PHP dependencies
 
-Copy the `site/beammp-web` folder to `/var/www/beammp-web`, then install PHP dependencies with Composer:
+Create a symbolic link between the folder `site/beammp-web` and `/var/www/beammp-web`, then install PHP dependencies with Composer:
 
 ```bash
-sudo cp -r site/beammp-web /var/www/beammp-web
-cd /var/www/beammp-web
+sudo ln -s ~/BeamMP-web/site/beammp-web /var/www/beammp-web
+cd site/beammp-web/
 sudo composer install
 ```
 
-### Enable Apache site
+### Apache site activation
 
 ```bash
 cd ~/BeamMP-web
 sudo cp config/beammp-web.conf /etc/apache2/sites-available/
-sudo a2dissite 000-default.conf  # If the default site is still enabled
+# (Optional) Disable the default Apache site if still active
+sudo a2dissite 000-default.conf
 sudo a2ensite beammp-web.conf
 sudo a2enmod rewrite
 sudo systemctl reload apache2
@@ -48,7 +49,7 @@ sudo systemctl reload apache2
 
 ### PHP configuration
 
-Edit `/etc/php/*/apache2/php.ini` with:
+Edit `/etc/php/*/apache2/php.ini` and modify:
 
 ```ini
 upload_max_filesize = 10G
@@ -58,7 +59,7 @@ max_execution_time = 300
 memory_limit = 256M
 ```
 
-Then restart Apache:
+Restart Apache:
 
 ```bash
 sudo systemctl restart apache2
@@ -66,15 +67,15 @@ sudo systemctl restart apache2
 
 ---
 
-## 4️⃣ Database setup
+## 4️⃣ Database
 
-### Secure MariaDB
+### MariaDB hardening
 
 ```bash
-sudo mysql_secure_installation  # Follow the prompts
+sudo mysql_secure_installation
 ```
 
-### Import schema and create user
+### Import schema and assign rights
 
 ```bash
 sudo mysql -u root -p < sql/beammp_db.sql
@@ -84,51 +85,58 @@ sudo mysql -u root -p
 In the MariaDB shell:
 
 ```sql
-CREATE USER 'USER'@'localhost' IDENTIFIED BY 'PASSWORD';  -- Replace USER and PASSWORD
+-- Create the user (replace USER and PASSWORD with your own)
+CREATE USER 'USER'@'localhost' IDENTIFIED BY 'PASSWORD';
+
+-- Grant privileges (replace USER accordingly)
 GRANT ALL PRIVILEGES ON beammp_db.beammp TO 'USER'@'localhost';
 GRANT ALL PRIVILEGES ON beammp_db.beammp_users TO 'USER'@'localhost';
 GRANT ALL PRIVILEGES ON beammp_db.users TO 'USER'@'localhost';
+
+-- Apply changes
 FLUSH PRIVILEGES;
+
+-- Exit MariaDB
 EXIT;
 ```
 
 ---
 
-## 🗞️ `.env` file (application configuration)
+## 🗞️ `.env` File (App Configuration)
 
-Create or edit `/var/www/beammp-web/.env`:
+Create or edit the file `/var/www/beammp-web/.env`:
 
 ```bash
 sudo nano /var/www/beammp-web/.env
 ```
 
-Here is the template:
+Here's the template:
 
 ```dotenv
 # Local database
 DB_HOST=localhost
 DB_NAME=beammp_db
-DB_USER=xxxxxx  # Replace with DB user
-DB_PASSWORD=xxxxxx  # Replace with DB password
+DB_USER=USER         # Replace USER with your MariaDB user
+DB_PASSWORD=PASSWORD # Replace with the user's password
 
-# Remote config paths
-CONFIG_REMOTE_PATH=/home/xxxxxxx/BeamMP-Server/bin/ServerConfig.toml  # Replace xxxxxx with your system username
-LOG_FILE_PATH=/home/xxxxxxx/BeamMP-Server/bin/Server.log
+# BeamMP server paths
+CONFIG_REMOTE_PATH=/home/USER/BeamMP-Server/bin/ServerConfig.toml  # Replace USER with your Linux username
+LOG_FILE_PATH=/home/USER/BeamMP-Server/bin/Server.log               # Same
 USER_CHANGE=www-data
 
-# Paths
-BEAMMP_FOLDER=/home/xxxxxxx/BeamMP-Server/bin/Resources/
-PATH_RESOURCES=/home/xxxxxxx/BeamMP-Server/bin/Resources/
+# Main paths
+BEAMMP_FOLDER=/home/USER/BeamMP-Server/bin/Resources/
+PATH_RESOURCES=/home/USER/BeamMP-Server/bin/Resources/
 BASE_PATH=/var/www/beammp-web
-SERVERCONFIG_PATH=/home/xxxxxxx/BeamMP-Server/bin/ServerConfig.toml
+SERVERCONFIG_PATH=/home/USER/BeamMP-Server/bin/ServerConfig.toml
 
-# Discord webhooks
-DISCORD_WEBHOOK_MOD_UPLOAD=https://discord.com/api/webhooks/xxxx  # Replace with upload webhook
-DISCORD_WEBHOOK_SERVER_RESTART=https://discord.com/api/webhooks/xxxx  # Replace with server info webhook
+# Discord Webhooks
+DISCORD_WEBHOOK_MOD_UPLOAD=https://discord.com/api/webhooks/xxxx   # Replace with webhook for upload channel
+DISCORD_WEBHOOK_SERVER_RESTART=https://discord.com/api/webhooks/xxx # Replace with webhook for server status
 
 # Other
-BASE_URL=http://192.xxx.xxx.xxx  # Replace with your IP
-LANG_DEFAULT=fr  # or 'en' for English or 'de' for German
+BASE_URL=http://192.xxx.xxx.xxx   # Local IP or domain
+LANG_DEFAULT=en                   # Default language: fr, en, de
 ```
 
 ---
@@ -138,14 +146,14 @@ LANG_DEFAULT=fr  # or 'en' for English or 'de' for German
 ### Move and configure
 
 ```bash
-cp -R bot ~/ 
+cp -R bot ~/
 nano ~/bot/config.json
 ```
 
-Configure:
+Fill in:
 
-* Database credentials
-* Discord webhook for user connection tracking
+* database credentials
+* webhook URL for connection management
 
 ---
 
@@ -154,11 +162,11 @@ Configure:
 ### Move and configure
 
 ```bash
-cp -R scripts ~/ 
+cp -R scripts ~/
 nano ~/scripts/config.json
 ```
 
-Then execute:
+Then run:
 
 ```bash
 php ~/scripts/create_user.sh
@@ -177,44 +185,58 @@ mkdir -p ~/BeamMP-Server/bin/Resources/inactive_mods
 
 ## 8️⃣ Unix Permissions
 
-### Apache group access
+### Add Apache to your user group
 
 ```bash
-sudo adduser www-data USER  # Replace USER with your system username
+# Replace USER with your Linux username
+sudo adduser www-data USER
 ```
 
 ### Access to `ServerConfig.toml`
 
 ```bash
-sudo chmod g+rx /home/xxxx  # Replace with your username
-sudo chmod g+rx /home/xxxx/BeamMP-Server
-sudo chmod g+wx /home/xxxx/BeamMP-Server/bin
-sudo chmod g+rw /home/xxxx/BeamMP-Server/bin/ServerConfig.toml
+# Allow www-data to access your home directory
+sudo chmod g+rx /home/USER
+
+# Allow read access to BeamMP-Server folder
+sudo chmod g+rx /home/USER/BeamMP-Server
+
+# Allow write access to /bin folder
+sudo chmod g+wx /home/USER/BeamMP-Server/bin
+
+# Allow read/write on ServerConfig.toml
+sudo chmod g+rw /home/USER/BeamMP-Server/bin/ServerConfig.toml
 ```
 
-### Access to mod/map resources
+### Access to Resources folder
 
 ```bash
-sudo chmod -R g+w /home/xxxx/BeamMP-Server/bin/Resources/
-sudo chgrp -R www-data /xxxx/beammp/BeamMP-Server/bin/Resources/
-sudo chmod g+s /home/xxxx/BeamMP-Server/bin/Resources/
+# Allow write access to Resources content
+sudo chmod -R g+w /home/USER/BeamMP-Server/bin/Resources/
+
+# Set group ownership to www-data
+sudo chgrp -R www-data /home/USER/BeamMP-Server/bin/Resources/
+
+# Set setgid bit so new files inherit www-data group
+sudo chmod g+s /home/USER/BeamMP-Server/bin/Resources/
 ```
 
 ---
 
 ## 9️⃣ systemd Services
 
-### Configure and enable
+### Copy, edit, and activate
 
 ```bash
-sudo cp services/*.service /etc/systemd/system/  # Edit the .service files for your username
+# Edit both .service files to match your Linux user
+sudo cp services/*.service /etc/systemd/system/
 sudo systemctl daemon-reexec
 sudo systemctl daemon-reload
 sudo systemctl enable BeamMP.service joueurs.service
 sudo systemctl start BeamMP.service joueurs.service
 ```
 
-### Allow restart without password
+### Allow Apache to restart services
 
 ```bash
 sudo visudo
@@ -231,8 +253,8 @@ www-data ALL=NOPASSWD: /bin/systemctl restart joueurs.service
 
 ## 🔚 Final Steps
 
-* Test website access
-* Check service status:
+* Test web access
+* Check service statuses:
 
 ```bash
 sudo systemctl status BeamMP.service joueurs.service
