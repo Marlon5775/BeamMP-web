@@ -170,8 +170,8 @@ php ~/scripts/create_user.sh
 ## 7️⃣ Ordner für inaktive Mods/Maps erstellen
 
 ```bash
-mkdir -p ~/BeamMP-Server/bin/Resources/inactive_maps
-mkdir -p ~/BeamMP-Server/bin/Resources/inactive_mods
+mkdir -p ~/BeamMP-Server/bin/Resources/inactive_map
+mkdir -p ~/BeamMP-Server/bin/Resources/inactive_mod
 ```
 
 ---
