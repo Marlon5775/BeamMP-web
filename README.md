@@ -8,7 +8,6 @@
 
 - **2025-07-19:** Folder naming standardized (`inactive_map`, `inactive_mod`) in scripts and docs.
 - **2025-07-19:** Documentation cleanup, multi-language installation guides linked below.
-- **2025-07-19:** Work in progress: advanced install script, multi-instance support (see section below).
 
 ---
 
@@ -48,9 +47,9 @@ Ideal for both public hosts and private games, **BeamMP-Web** puts everything in
 
 ## 📚 Documentation
 
-- 🇬🇧 [English Install Guide](./docs/INSTALL_EN.md)
-- 🇫🇷 [Guide d’installation français](./docs/INSTALL_FR.md)
-- 🇩🇪 [Deutsches Installations-Tutorial](./docs/INSTALL_DE.md)
+- [English Install Guide](./docs/INSTALL_EN.md)
+- [Guide d’installation français](./docs/INSTALL_FR.md)
+- [Deutsches Installations-Tutorial](./docs/INSTALL_DE.md)
 
 ---
 
