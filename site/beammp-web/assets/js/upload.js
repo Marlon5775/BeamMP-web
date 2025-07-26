@@ -1,4 +1,10 @@
-console.log("🚀 Script chargé");
+function tr(key, params = {}) {
+    let str = t[key] || key;
+    Object.keys(params).forEach(param => {
+        str = str.replace(`{${param}}`, params[param]);
+    });
+    return str;
+}
 window.onload = function () {
     console.log("✅ DOM prêt");
     const uploadForm = document.getElementById("uploadForm");

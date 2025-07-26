@@ -3,18 +3,25 @@ require_once __DIR__ . '/../db.php';
 
 // Fonction pour construire le chemin d'une image
 function buildImagePath($image) {
-    $pathForImages = '/assets/images/BeamMP';
-    $fullImagePath = rtrim($pathForImages, '/') . '/' . ltrim($image, '/');
-    return file_exists($_SERVER['DOCUMENT_ROOT'] . $fullImagePath) ? $fullImagePath : '/assets/images/no_image.png';
-}
+    $dataPath = $_ENV['DATA_PATH'] ?? '/var/www/beammp-test/DATA';
 
+    // Nettoie le début images/ ou /images/
+    $image = ltrim(preg_replace('#^/?images/#', '', $image), '/');
+
+    // Chemin complet sur le disque
+    $diskPath = rtrim($dataPath, '/') . '/images/' . $image;
+    // Chemin web accessible par le navigateur
+    $webPath  = '/DATA/images/' . $image;
+
+    return file_exists($diskPath) ? $webPath : '/assets/images/no_image.png';
+}
 // Fonction pour récupérer le contenu d'un fichier description
 function getDescriptionContent($descriptionPath) {
-    $pathForDescriptions = '/assets/fichiers/BeamMP';
-    $fullDescriptionPath = rtrim($pathForDescriptions, '/') . '/' . ltrim($descriptionPath, '/');
+    $dataPath = $_ENV['DATA_PATH'] ?? '/var/www/beammp-web/DATA';
+    $fullDescriptionPath = rtrim($dataPath, '/') . '/' . ltrim($descriptionPath, '/');
 
-    if (is_file($_SERVER['DOCUMENT_ROOT'] . $fullDescriptionPath)) {
-        return file_get_contents($_SERVER['DOCUMENT_ROOT'] . $fullDescriptionPath);
+if (is_file($fullDescriptionPath)) {
+        return file_get_contents($fullDescriptionPath);
     } else {
         error_log("Description introuvable ou invalide : $fullDescriptionPath");
         return "Description non disponible.";
@@ -24,8 +31,8 @@ function getDescriptionContent($descriptionPath) {
 // Fonction générique pour récupérer des éléments de la table `beammp`
 function fetchBeamMPData($type, $conditions = [], $sort = 'az') {
     global $pdo;
-
-    $sql = "SELECT * FROM beammp WHERE type = :type";
+    $table = $_ENV['BEAMMP_TABLE'] ?? 'beammp';
+    $sql = "SELECT * FROM $table WHERE type = :type";
     $params = ['type' => $type];
 
     foreach ($conditions as $column => $value) {
@@ -100,8 +107,8 @@ function getMods($modStatus = 'all') {
 // Fonction pour récupérer la carte active
 function getActiveMap() {
     global $pdo;
-
-    $sql = "SELECT nom, description, image FROM beammp WHERE map_active = 1";
+    $table = $_ENV['BEAMMP_TABLE'] ?? 'beammp';
+    $sql = "SELECT nom, description, image FROM $table WHERE map_active = 1";
     $stmt = $pdo->query($sql);
     $mapInfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -134,10 +141,11 @@ function getActiveMods() {
 // Fonction pour compter les véhicules actifs et inactifs
 function getVehiculeCounts() {
     global $pdo;
+    $table = $_ENV['BEAMMP_TABLE'] ?? 'beammp';
     $sql = "SELECT 
                 SUM(mod_actif = 1) AS active_count,
                 SUM(mod_actif = 0) AS inactive_count
-            FROM beammp
+            FROM $table
             WHERE type = 'vehicule'";
 
     $stmt = $pdo->query($sql);

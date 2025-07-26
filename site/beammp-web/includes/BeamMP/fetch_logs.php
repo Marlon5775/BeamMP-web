@@ -1,10 +1,20 @@
 <?php
-session_start();
-require_once __DIR__ . '/../../vendor/autoload.php';
-require_once __DIR__ . '/../../includes/roles.php';
+if (!isset($instanceRoot)) {
+    function findInstanceRoot($maxLevels = 5) {
+        $dir = dirname($_SERVER['SCRIPT_FILENAME']);
+        for ($i = 0; $i < $maxLevels; $i++) {
+            if (file_exists($dir . '/bootstrap.php')) return $dir;
+            $parent = dirname($dir);
+            if ($parent === $dir) break;
+            $dir = $parent;
+        }
+        throw new Exception("Instance root (bootstrap.php) not found");
+    }
+    $instanceRoot = findInstanceRoot(5);
+    require_once $instanceRoot . '/bootstrap.php';
+}
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
-$dotenv->load();
+require_once __DIR__ . '/../../includes/roles.php';
 
 $logFilePath = $_ENV['LOG_FILE_PATH'];
 

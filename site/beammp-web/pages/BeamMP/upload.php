@@ -1,5 +1,18 @@
 <?php
-session_start();
+// Trouver la racine d'instance
+function findInstanceRoot($maxLevels = 5) {
+    $dir = dirname($_SERVER['SCRIPT_FILENAME']);
+    for ($i = 0; $i < $maxLevels; $i++) {
+        if (file_exists($dir . '/bootstrap.php')) return $dir;
+        $parent = dirname($dir);
+        if ($parent === $dir) break;
+        $dir = $parent;
+    }
+    throw new Exception("Instance root (bootstrap.php) not found");
+}
+$instanceRoot = findInstanceRoot(5);
+require_once $instanceRoot . '/bootstrap.php';
+
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../../index.php');
     exit;
@@ -9,7 +22,7 @@ require_once __DIR__ . '/../../includes/roles.php';
 require_once __DIR__ . '/../../includes/BeamMP/i18n.php';
 
 $title = 'Upload';
-$h1Title = 'BeamMP';
+$h1Title = $_ENV['TITLE'] ?? 'BeamMP';
 $buttons = [
     ['link' => '../BeamMP', 'title' => t('btn_back'), 'icon' => '../../assets/images/BACK.png']
 ];
@@ -131,6 +144,7 @@ $buttons = [
  <script>
     const t = <?= json_encode($translations, JSON_UNESCAPED_UNICODE); ?>;
 </script>
+<?php include __DIR__ . '/../../includes/BeamMP/traductions_js.php'; ?>
 <script src="../../assets/js/upload.js"></script>
 <script>
     // Force la détection du type une fois le DOM prêt

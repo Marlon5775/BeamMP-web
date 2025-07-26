@@ -1,11 +1,11 @@
 {
-  "webhook_url": "https://",
-  "logfile_path": "/home/beammp/BeamMP-Server/bin/Server.log",
-  "lang": "fr",
+  "webhook_url": "",
+  "logfile_path": "",
+  "lang": "",
+  "server_name": "",
+  "table_name": "",
   "db": {
-    "host": "localhost",
-    "user": "xxxxx",
-    "password": "xxxxx",
-    "database": "beam^p_db"
+    "user": "",
+    "password": ""
   }
 }

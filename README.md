@@ -6,64 +6,74 @@
 
 ## 🚀 Updates
 
-- **2025-07-19:** Folder naming standardized (`inactive_map`, `inactive_mod`) in scripts and docs.
-- **2025-07-19:** Documentation cleanup, multi-language installation guides linked below.
+- **2025-07-27:** Complete app overhaul – now supports multi-instances, automatic install script, and bot compilation.
+- **2025-07-19:** Standardized folder naming (`inactive_map`, `inactive_mod`) in scripts and docs.
+- **2025-07-19:** Cleaned up the documentation, multi-language installation guides available below.
 
 ---
 
 ## ⚒️ Work in Progress
 
-- **Comprehensive installation script** (automated setup from scratch)
-- **Custom web port selection** during install
-- **Multiple instance support** (host several BeamMP-Web panels independently)
-- **ARM compatibility** (Raspberry Pi & ARM servers)
+- ~~Full installation script (automated setup from scratch)~~ ✅  
+- ~~Custom web port selection during setup~~ ✅  
+- ~~Multi-instance support (host several BeamMP-Web panels independently)~~ ✅  
+- ✅ ARM compatibility (Raspberry Pi & ARM servers) – **functional, awaiting feedback**
 
 ---
 
 ## 🌐 What is BeamMP-Web?
 
-**BeamMP-Web** is a lightweight, multilingual, and secure web interface for managing your **BeamMP server** from any browser – local or remote.  
-It simplifies server administration while giving you full control over mods, maps, configs, and server state.
+**BeamMP-Web** is a lightweight, multilingual, and secure web interface to manage your **BeamMP server** from any browser – local or remote.  
+It simplifies server administration while giving you full control over mods, maps, configs, and the server state.
 
-Ideal for both public hosts and private games, **BeamMP-Web** puts everything in one clean dashboard.
+Perfect for public hosts and private games alike, **BeamMP-Web** brings everything together into one clean dashboard.
 
 ---
 
 ## ✨ Features
 
-- 🔐 Secure login system
-- 🌍 Works via local **HTTP** or **HTTPS** with your own domain  
-  > ⚠️ Webhook images may not display in HTTP local mode
-- 📦 Add/remove **mods**, **maps**, and **vehicles**
-- ✅ Enable/disable mods and vehicles individually (click image to toggle; greyed out = disabled)
-- 🗺️ Map switching (restart required)
-- 📄 View **BeamMP server logs** directly in the interface
-- ⚙️ Edit `serverConfig.toml`
-- 📣 Connection/disconnection webhooks with custom rank system
-- 📊 Live server status webhook (refresh feedback)
-- 🔁 Webhook on mod upload from the web interface
+- 🔐 Secure login system  
+- 🌍 Works over local **HTTP** or **HTTPS** with your custom domain  
+  > ⚠️ Webhook images may not display in HTTP local mode  
+- 📦 Add/remove **mods**, **maps**, and **vehicles**  
+- ✅ Enable/disable individual mods and vehicles (click image to toggle; greyed out = disabled)  
+- 🗺️ Switch maps (requires restart)  
+- 📄 View **BeamMP server logs** directly in the interface  
+- ⚙️ Edit the `serverConfig.toml` file  
+- 📣 Connection/disconnection webhooks with custom rank system  
+- 📊 Live server status webhook (refresh feedback)  
+- 🔁 Webhook triggered when a mod is uploaded via the web interface  
+
+---
+
+## ⚙️ Quick Installation
+
+1. Install required dependencies  
+2. Create the database user and set privileges  
+3. Make the install script executable  
+4. Launch the script… and follow the guide 😄  
 
 ---
 
 ## 📚 Documentation
 
-- [English Install Guide](./docs/INSTALL_EN.md)
-- [Guide d’installation français](./docs/INSTALL_FR.md)
-- [Deutsches Installations-Tutorial](./docs/INSTALL_DE.md)
+- [English Install Guide](./docs/INSTALL_EN.md)  
+- [French Install Guide](./docs/INSTALL_FR.md)  
+- [German Install Guide](./docs/INSTALL_DE.md)  
 
 ---
 
 ## 🤝 Contributors
 
-Thank you to everyone helping to improve this project!  
-The full list of contributors is available in the [CONTRIBUTORS](./CONTRIBUTORS.md) file.
+Thanks to everyone contributing to this project!  
+Full list available in the [CONTRIBUTORS](./CONTRIBUTORS.md) file.
 
 ---
 
 ## 👤 Author
 
 Project maintained by **[Zyphro3D](https://github.com/Zyphro3D)**  
-Suggestions, improvements, and community feedback are welcome!
+Suggestions, improvements, and community feedback welcome!
 
 ---
 

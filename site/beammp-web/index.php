@@ -1,19 +1,17 @@
 <?php
-// Sécurisation avancée des cookies de session
-$isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
-session_set_cookie_params([
-    'httponly' => true,
-    'secure'   => $isHttps,
-    'samesite' => 'Strict',
-]);
-
-ini_set('session.cookie_secure', $isHttps ? '1' : '0');
-ini_set('session.cookie_httponly', '1');
-ini_set('session.cookie_samesite', 'Strict');
-
-// Démarrage session OBLIGATOIRE AVANT vérif/redirection
-session_start();
-
+// Trouver la racine d'instance
+function findInstanceRoot($maxLevels = 5) {
+    $dir = dirname($_SERVER['SCRIPT_FILENAME']);
+    for ($i = 0; $i < $maxLevels; $i++) {
+        if (file_exists($dir . '/bootstrap.php')) return $dir;
+        $parent = dirname($dir);
+        if ($parent === $dir) break;
+        $dir = $parent;
+    }
+    throw new Exception("Instance root (bootstrap.php) not found");
+}
+$instanceRoot = findInstanceRoot(5);
+require_once $instanceRoot . '/bootstrap.php';
 require_once __DIR__ . '/includes/BeamMP/i18n.php';
 require_once __DIR__ . '/includes/roles.php';
 
@@ -41,7 +39,8 @@ if (isset($_SESSION['user_id'])) {
     <div class="page-wrapper">
     <?php
     $title = 'Accueil';
-    $h1Title = 'Gestion serveur BeamMP';
+    $h1end = $_ENV['TITLE'] ?? 'BeamMP';
+    $h1Title = 'Gestion serveur BeamMP - ' . $h1end;
     include __DIR__ . '/includes/header.php';
     ?>
 
@@ -86,6 +85,7 @@ if (isset($_SESSION['user_id'])) {
 
     <?php include __DIR__ . '/includes/footer.php'; ?>
 </div>
+    <?php include __DIR__ . '/includes/BeamMP/traductions_js.php'; ?>
     <script src="assets/js/index.js"></script>
 </body>
 </html>

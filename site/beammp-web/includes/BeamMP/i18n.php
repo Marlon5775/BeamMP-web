@@ -1,13 +1,18 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+if (!isset($instanceRoot)) {
+    function findInstanceRoot($maxLevels = 5) {
+        $dir = dirname($_SERVER['SCRIPT_FILENAME']);
+        for ($i = 0; $i < $maxLevels; $i++) {
+            if (file_exists($dir . '/bootstrap.php')) return $dir;
+            $parent = dirname($dir);
+            if ($parent === $dir) break;
+            $dir = $parent;
+        }
+        throw new Exception("Instance root (bootstrap.php) not found");
+    }
+    $instanceRoot = findInstanceRoot(5);
+    require_once $instanceRoot . '/bootstrap.php';
 }
-
-require_once __DIR__ . '/../../vendor/autoload.php';
-
-// Chargement du .env
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
-$dotenv->load();
 
 // Langues supportées
 $supported_langs = ['fr', 'en', 'de'];

@@ -2,47 +2,36 @@
 let allVehicules = [];
 let allMods = [];
 
-
-// Initialisation au chargement de la page
 document.addEventListener("DOMContentLoaded", () => {
-    // La modale reste masquée au chargement de la page
     const mapModal = document.getElementById("mapModal");
-    if (mapModal) {
-        mapModal.style.display = "none";
-    }
-    // Charger les véhicules et les mods dès le chargement
+    if (mapModal) mapModal.style.display = "none";
     fetchItems('vehicule');
     fetchItems('mod');
     addDeleteEventListeners();
     filterMaps();
 });
 
-// Fonction pour redémarrer le serveur
 function refreshServer() {
-    const lang = document.documentElement.lang || 'en'; // ou récupérer depuis une variable globale
-
+    const lang = document.documentElement.lang || 'en';
     fetch('/includes/BeamMP/restart_server.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
-        body: JSON.stringify({ lang }) // ✅ On envoie la langue ici
+        body: JSON.stringify({ lang })
     })
     .then(response => {
-        if (!response.ok) throw new Error('Erreur lors du rafraîchissement du serveur.');
+        if (!response.ok) throw new Error(tr('server_restart_network_error'));
         return response.json();
     })
     .then(data => {
-        if (data.success) alert(data.message);
-        else alert(`Erreur : ${data.message}`);
+        if (data.success) alert(tr('server_restart_ok'));
+        else alert(tr('server_restart_error', { error: data.message }));
     })
     .catch(error => {
-        console.error('Erreur:', error);
-        alert('Une erreur est survenue lors du redémarrage du serveur.');
+        console.error('Error:', error);
+        alert(tr('server_restart_network_error'));
     });
 }
-
-
-
 
 // Gestion de la modale des cartes
 function openMapModal() {
@@ -52,31 +41,29 @@ function openMapModal() {
         loadMaps('all');
     }
 }
-
 function closeMapModal() {
     const mapModal = document.getElementById('mapModal');
     if (mapModal) mapModal.style.display = 'none';
 }
 
-// Charger les cartes depuis le serveur
 function loadMaps(mapType = 'all') {
     const mapList = document.getElementById('mapList');
-    mapList.innerHTML = '<p>Chargement...</p>';
+    mapList.innerHTML = `<p>${tr('loading_maps')}</p>`;
 
     fetch(`/includes/BeamMP/get_maps.php?type=${mapType}`)
         .then(response => {
-            if (!response.ok) throw new Error('Erreur lors de la récupération des cartes.');
+            if (!response.ok) throw new Error(tr('error_loading_maps'));
             return response.json();
         })
         .then(maps => {
             mapList.innerHTML = '';
             if (maps.length === 0) {
-                mapList.innerHTML = '<p>Aucune carte disponible.</p>';
+                mapList.innerHTML = `<p>${tr('no_map_available')}</p>`;
                 return;
             }
             maps.forEach(map => {
                 const mapItem = document.createElement('div');
-                mapItem.classNom = 'map-item';
+                mapItem.className = 'map-item';
                 mapItem.innerHTML = `
                     <div class="mapactive-box">
                         <div class="mapactive-image-container">
@@ -88,18 +75,18 @@ function loadMaps(mapType = 'all') {
                                 (() => {
                                     try {
                                         const desc = JSON.parse(map.description);
-                                        return desc[currentLang] || 'Description non disponible';
+                                        return desc[currentLang] || tr('desc_not_available');
                                     } catch {
-                                        return 'Description non disponible';
+                                        return tr('desc_not_available');
                                     }
                                 })()
                             }</p>
-                            <button class="btn btn-select" onclick="selectMap('${map.id_map}')" ${isAdmin ? '' : 'disabled'}>Sélectionner</button>
-                        
+                            <button class="btn btn-select" onclick="selectMap('${map.id_map}')" ${isAdmin ? '' : 'disabled'}>${tr('select')}</button>
                             <div class="map-delete-container">
-                                ${map.map_officielle === 0
-                                ? `<button class="map-delete-button" data-nom="${map.nom}" data-type="${map.type}" ${isAdmin ? '' : 'disabled'}>Supprimer</button>`
-                                : `<button class="map-official-badge" disabled>Officielle</button>`}
+                                ${map.map_officielle == 0
+                                    ? `<button class="map-delete-button" data-nom="${map.nom}" data-type="${map.type}" ${isAdmin ? '' : 'disabled'}>${tr('delete')}</button>`
+                                    : `<button class="map-official-badge" disabled>${tr('official')}</button>`
+                                }
                             </div>
                         </div>
                     </div>`;
@@ -109,76 +96,58 @@ function loadMaps(mapType = 'all') {
         })
         .catch(error => {
             console.error('Erreur lors de la récupération des cartes :', error);
-            mapList.innerHTML = '<p>Erreur lors du chargement des cartes.</p>';
+            mapList.innerHTML = `<p>${tr('error_loading_maps')}</p>`;
         });
 }
 
-// Fonction pour sélectionner une carte
 function selectMap(id_map) {
     fetch('/includes/BeamMP/executechangemap.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id_map })
     })
-        .then(response => {
-            if (!response.ok) throw new Error('Erreur lors de la sélection de la carte.');
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                closeMapModal();
-                location.reload();
-            } else {
-                alert(`Erreur : ${data.message}`);
-            }
-        })
-        .catch(error => {
-            console.error('Erreur :', error);
-            alert('Une erreur est survenue lors de la sélection de la carte.');
-        });
+    .then(response => {
+        if (!response.ok) throw new Error(tr('map_select_network_error'));
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            closeMapModal();
+            location.reload();
+        } else {
+            alert(tr('map_select_error', { error: data.message }));
+        }
+    })
+    .catch(error => {
+        console.error('Erreur :', error);
+        alert(tr('map_select_network_error'));
+    });
 }
 
-// Charger les véhicules ou mods depuis le serveur
 function fetchItems(type, options = {}) {
     const { status = 'all', search = '', sort = 'az' } = options;
-
-    // Sélectionner le conteneur pour afficher les éléments
     const container = document.querySelector(`.${type}-scroll-box`);
     if (!container) {
         console.error(`Conteneur pour ${type} introuvable.`);
         return;
     }
+    container.innerHTML = `<p>${tr('loading_items')}</p>`;
 
-    // Afficher un message de chargement
-    container.innerHTML = '<p>Chargement...</p>';
-
-    // Appeler l'API pour récupérer les données
     fetch(`/includes/BeamMP/get_items.php?type=${type}`)
         .then(response => {
-            if (!response.ok) throw new Error('Erreur réseau.');
+            if (!response.ok) throw new Error(tr('network_error'));
             return response.json();
         })
         .then(data => {
-            // Stocker toutes les données dans les variables globales
             if (type === 'vehicule') allVehicules = data;
             if (type === 'mod') allMods = data;
-
-            // Mettre à jour les compteurs fixes
             updateFixedCounts();
-
-            // Appliquer les filtres pour l'affichage des données
             const filteredData = applyFilters(data, status, search, sort);
-
-            // Nettoyer le conteneur
             container.innerHTML = '';
-
-            // Afficher un message si aucune donnée n'est disponible
             if (filteredData.length === 0) {
-                container.innerHTML = `<p>Aucun ${type} disponible.</p>`;
+                container.innerHTML = `<p>${tr('no_item_available', { type: tr(type) })}</p>`;
                 return;
             }
-
-            // Générer les éléments pour chaque entrée filtrée
             filteredData.forEach(item => {
                 const itemElement = document.createElement('div');
                 itemElement.className = `${type}-item individual-box`;
@@ -198,23 +167,20 @@ function fetchItems(type, options = {}) {
                             data-nom="${item.nom}" 
                             data-type="${type}"
                             ${isAdmin ? '' : 'disabled'}>
-                            Supprimer
+                            ${tr('delete')}
                         </button>
                     </div>`;
                 
                 container.appendChild(itemElement);
             });
-
-            // Ajouter les écouteurs pour la suppression
             addDeleteEventListeners();
         })
         .catch(error => {
             console.error('Erreur lors du chargement des données :', error);
-            container.innerHTML = `<p>Erreur lors du chargement des ${type}s.</p>`;
+            container.innerHTML = `<p>${tr('error_loading_items', { type: tr(type) })}</p>`;
         });
 }
 
-// Filtres et tri dynamiques
 function applyStatusFilter(type) {
     const status = document.getElementById(`${type}StatusFilter`).value;
     fetchItems(type, { status });
@@ -226,197 +192,154 @@ function applySearch(type) {
         console.error(`Search box for ${type} not found.`);
         return;
     }
-
     const searchValue = searchBox.value.toLowerCase();
-    console.log(`Recherche pour ${type}:`, searchValue); // Debugging
     fetchItems(type, { search: searchValue });
 }
-
 
 function applySort(type, criteria) {
     fetchItems(type, { sort: criteria });
 }
 
 function filterMaps() {
-    const selectedType = document.getElementById("mapTypeSelector").value; // Récupère la valeur sélectionnée
-
-    // Détermine le type de carte à charger (all, official, mod)
+    const selectedType = document.getElementById("mapTypeSelector").value;
     let mapType = "all";
-    if (selectedType === "official") {
-        mapType = "official";
-    } else if (selectedType === "mod") {
-        mapType = "mod";
-    }
-
-    // Appelle la fonction loadMaps avec le type de carte sélectionné
+    if (selectedType === "official") mapType = "official";
+    else if (selectedType === "mod") mapType = "mod";
     loadMaps(mapType);
 }
 
 function toggleMod(nom, type, element) {
-    // Trouver l'élément principal
     const item = document.querySelector(`.${type}-item[data-nom="${nom}"]`);
     if (!item) {
         console.error('Élément non trouvé pour', nom);
         return;
     }
-
-    // Chercher image + texte à modifier
     const img = item.querySelector('img');
     const h3 = item.querySelector('h3');
-
     if (!img || !h3) {
         console.error('Image ou titre introuvable.');
         return;
     }
-
-    // Détecter l'état actuel via data-active
-    const currentStatus = item.getAttribute('data-active') === "1"; // true si actif
-
-    // Appel serveur pour inverser
+    const currentStatus = item.getAttribute('data-active') === "1";
     fetch('/includes/BeamMP/toggle_mod.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nom, type })
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                console.log(`Statut de ${nom} mis à jour avec succès.`);
-
-                // Inverser l'état local
-                const newStatus = !currentStatus;
-                item.setAttribute('data-active', newStatus ? "1" : "0");
-
-                // Mise à jour visuelle
-                if (newStatus) {
-                    img.classList.remove('inactive-mod');
-                    img.classList.add('active-mod');
-                    h3.classList.remove('disabled-text');
-                } else {
-                    img.classList.remove('active-mod');
-                    img.classList.add('inactive-mod');
-                    h3.classList.add('disabled-text');
-                }
-
-                // Filtrage dynamique
-                const currentFilter = document.getElementById(`${type}StatusFilter`).value;
-                if (currentFilter === "active" && !newStatus) {
-                    item.classList.add('hidden');
-                } else if (currentFilter === "inactive" && newStatus) {
-                    item.classList.add('hidden');
-                } else {
-                    item.classList.remove('hidden');
-                }
-
-                // Mise à jour des compteurs
-                updateCountsFromDOM(type);
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const newStatus = !currentStatus;
+            item.setAttribute('data-active', newStatus ? "1" : "0");
+            if (newStatus) {
+                img.classList.remove('inactive-mod');
+                img.classList.add('active-mod');
+                h3.classList.remove('disabled-text');
             } else {
-                alert(`Erreur : ${data.message}`);
+                img.classList.remove('active-mod');
+                img.classList.add('inactive-mod');
+                h3.classList.add('disabled-text');
             }
-        })
-        .catch(error => {
-            console.error('Erreur lors de la mise à jour du statut :', error);
-            alert('Une erreur est survenue.');
-        });
+            const currentFilter = document.getElementById(`${type}StatusFilter`).value;
+            if (currentFilter === "active" && !newStatus) {
+                item.classList.add('hidden');
+            } else if (currentFilter === "inactive" && newStatus) {
+                item.classList.add('hidden');
+            } else {
+                item.classList.remove('hidden');
+            }
+            updateCountsFromDOM(type);
+        } else {
+            alert(tr('toggle_mod_error', { error: data.message }));
+        }
+    })
+    .catch(error => {
+        console.error('Erreur lors de la mise à jour du statut :', error);
+        alert(tr('toggle_mod_network_error'));
+    });
 }
-
-
-
 
 function deleteItem(nom, type) {
     fetch('/includes/BeamMP/delete_mod.php', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ mod_nom: nom, mod_type: type }), // Utilise 'mod_nom'
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mod_nom: nom, mod_type: type }),
     })
-        .then(response => {
-            if (!response.ok) throw new Error('Erreur réseau.');
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                console.log('Élément supprimé avec succès.');
-                const item = document.querySelector(`[data-nom="${nom}"][data-type="${type}"]`);
-                if (item) item.remove();
-            } else {
-                console.error('Erreur :', data.message);
-                alert(`Erreur : ${data.message}`);
-            }
-        })
-        .catch(error => {
-            console.error('Erreur lors de la suppression :', error);
-        });
+    .then(response => {
+        if (!response.ok) throw new Error(tr('network_error'));
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            console.log('Élément supprimé avec succès.');
+            const item = document.querySelector(`[data-nom="${nom}"][data-type="${type}"]`);
+            if (item) item.remove();
+        } else {
+            console.error('Erreur :', data.message);
+            alert(tr('delete_error', { error: data.message }));
+        }
+    })
+    .catch(error => {
+        console.error('Erreur lors de la suppression :', error);
+    });
 }
 
 function addDeleteEventListeners() {
     const deleteButtons = document.querySelectorAll('.map-delete-button, .item-delete-button');
-
     deleteButtons.forEach(button => {
         button.addEventListener('click', function () {
-            const nom = this.dataset.nom; // Récupération du nom
-            const type = this.dataset.type; // Récupération du type
-
+            const nom = this.dataset.nom;
+            const type = this.dataset.type;
             showDeleteConfirmation(nom, type, () => {
-                // Exécuter la suppression
                 fetch('/includes/BeamMP/delete_mod.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ mod_nom: nom, mod_type: type })
                 })
-                    .then(response => {
-                        if (!response.ok) throw new Error('Erreur réseau.');
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.success) {
-                            const item = this.closest('.map-item, .mod-item');
-                            if (item) item.remove();
-                            console.log('Élément supprimé avec succès.');
-                            fetchItems(type);
-                        } else {
-                            console.error('Erreur :', data.message);
-                            alert(`Erreur : ${data.message}`);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erreur lors de la suppression :', error);
-                    });
+                .then(response => {
+                    if (!response.ok) throw new Error(tr('network_error'));
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        const item = this.closest('.map-item, .mod-item');
+                        if (item) item.remove();
+                        fetchItems(type);
+                    } else {
+                        alert(tr('delete_error', { error: data.message }));
+                    }
+                })
+                .catch(error => {
+                    alert(tr('delete_error', { error: error.message }));
+                });
             });
         });
     });
 }
 
-// Fonction pour afficher la boîte de confirmation de suppression
 function showDeleteConfirmation(nom, type, onConfirm) {
     const confirmationBox = document.getElementById('deleteConfirmationBox');
     const confirmationMessage = document.getElementById('deleteConfirmationMessage');
     const confirmButton = document.getElementById('confirmDeleteButton');
     const cancelButton = document.getElementById('cancelDeleteButton');
 
-    confirmationBox.style.display = 'flex'; // Affiche la boîte
-    confirmationMessage.textContent = `Voulez-vous vraiment supprimer ${nom} (${type}) ?`;
+    confirmationBox.style.display = 'flex';
+    confirmationMessage.textContent = tr('confirm_delete_item', { nom, type: tr(type) });
 
-    // Gestion du bouton de confirmation
     confirmButton.onclick = () => {
-        onConfirm(); // Exécute l'action de suppression
+        onConfirm();
         confirmationBox.style.display = 'none';
     };
-
-    // Gestion du bouton d'annulation
     cancelButton.onclick = () => {
-        confirmationBox.style.display = 'none'; // Ferme la boîte
+        confirmationBox.style.display = 'none';
     };
 }
 
 function updateCounts(type, data) {
-    // Filtrer les données pour obtenir les différents totaux
     const totalCount = data.length;
     const activeCount = data.filter(item => item.mod_actif == 1).length;
     const inactiveCount = totalCount - activeCount;
 
-    // Mettre à jour les compteurs dans le DOM
     if (type === 'vehicule') {
         document.getElementById('vehiculeTotalCount').textContent = totalCount;
         document.getElementById('vehiculeActiveCount').textContent = activeCount;
@@ -427,13 +350,13 @@ function updateCounts(type, data) {
         document.getElementById('modInactiveCount').textContent = inactiveCount;
     }
 }
+
 function updateCountsFromDOM(type) {
     const items = document.querySelectorAll(`.${type}-item`);
     const totalCount = items.length;
     const activeCount = Array.from(items).filter(item => item.getAttribute('data-active') === "1").length;
     const inactiveCount = totalCount - activeCount;
 
-    // Mettre à jour les compteurs dans le DOM
     if (type === 'vehicule') {
         document.getElementById('vehiculeTotalCount').textContent = totalCount;
         document.getElementById('vehiculeActiveCount').textContent = activeCount;
@@ -444,45 +367,32 @@ function updateCountsFromDOM(type) {
         document.getElementById('modInactiveCount').textContent = inactiveCount;
     }
 }
+
 function updateFixedCounts() {
-    // Compteurs pour les véhicules
     const vehiculeTotal = allVehicules.length;
     const vehiculeActive = allVehicules.filter(item => item.mod_actif == 1).length;
     const vehiculeInactive = vehiculeTotal - vehiculeActive;
-
     document.getElementById('vehiculeTotalCount').textContent = vehiculeTotal;
     document.getElementById('vehiculeActiveCount').textContent = vehiculeActive;
     document.getElementById('vehiculeInactiveCount').textContent = vehiculeInactive;
 
-    // Compteurs pour les mods
     const modTotal = allMods.length;
     const modActive = allMods.filter(item => item.mod_actif == 1).length;
     const modInactive = modTotal - modActive;
-
     document.getElementById('modTotalCount').textContent = modTotal;
     document.getElementById('modActiveCount').textContent = modActive;
     document.getElementById('modInactiveCount').textContent = modInactive;
 }
 
-
 function applyFilters(data, status, search, sort) {
     let filteredData = [...data];
-
-    // Filtre par statut actif/inactif
-    if (status === 'active') {
-        filteredData = filteredData.filter(item => item.mod_actif == 1);
-    } else if (status === 'inactive') {
-        filteredData = filteredData.filter(item => item.mod_actif == 0);
-    }
-
-    // Filtre par recherche
+    if (status === 'active') filteredData = filteredData.filter(item => item.mod_actif == 1);
+    else if (status === 'inactive') filteredData = filteredData.filter(item => item.mod_actif == 0);
     if (search) {
         filteredData = filteredData.filter(item =>
             item.nom.toLowerCase().includes(search.toLowerCase())
         );
     }
-
-    // Tri des résultats
     if (sort === 'az') {
         filteredData.sort((a, b) => a.nom.localeCompare(b.nom));
     } else if (sort === 'za') {
@@ -492,6 +402,5 @@ function applyFilters(data, status, search, sort) {
     } else if (sort === 'oldest') {
         filteredData.sort((a, b) => new Date(a.date) - new Date(b.date));
     }
-
     return filteredData;
 }

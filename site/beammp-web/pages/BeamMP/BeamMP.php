@@ -1,7 +1,18 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+// Trouver la racine d'instance
+function findInstanceRoot($maxLevels = 5) {
+    $dir = dirname($_SERVER['SCRIPT_FILENAME']);
+    for ($i = 0; $i < $maxLevels; $i++) {
+        if (file_exists($dir . '/bootstrap.php')) return $dir;
+        $parent = dirname($dir);
+        if ($parent === $dir) break;
+        $dir = $parent;
+    }
+    throw new Exception("Instance root (bootstrap.php) not found");
 }
+$instanceRoot = findInstanceRoot(5);
+require_once $instanceRoot . '/bootstrap.php';
+
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../../index.php');
     exit;
@@ -15,7 +26,7 @@ $isSuperAdmin = hasRole(['SuperAdmin']);
 $isAdmin = hasRole(['SuperAdmin', 'Admin']);
 
 $title = 'BeamMP';
-$h1Title = 'BeamMP';
+$h1Title = $_ENV['TITLE'] ?? 'BeamMP';
 $buttons = [
     ['link' => '/Upload', 'title' => t('btn_add_mod'), 'icon' => '/assets/images/ADD.png'],
     ['link' => '/Admin', 'title' => t('btn_logs'), 'icon' => '/assets/images/LOG.png'],
@@ -170,6 +181,7 @@ $buttons = [
         const isSuperAdmin = <?= json_encode($isSuperAdmin); ?>;
     </script>
     <script>const currentLang = '<?= $lang ?>';</script>
+    <?php include __DIR__ . '/../../includes/BeamMP/traductions_js.php'; ?>
     <script src="../../assets/js/BeamMP.js"></script>
 
 </body>

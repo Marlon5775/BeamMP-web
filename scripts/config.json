@@ -1,8 +1,0 @@
-{
-  "db": {
-    "host": "localhost",
-    "name": "beammp_db",
-    "user": "xxxxx",
-    "pass": "xxxxx"
-  }
-}

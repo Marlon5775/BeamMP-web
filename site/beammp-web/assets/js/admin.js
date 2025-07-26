@@ -30,15 +30,16 @@ function saveField(fieldName) {
     })
     .then(response => response.json())
     .then(result => {
-        if (result.success) {
-            alert(`✅ ${fieldName} sauvegardé !`);
+        if (result.success) {alert
+            alert(t['save_ok'].replace('{field}', fieldName));
         } else {
-            alert(`Erreur : ${result.error}`);
+           alert(t['save_error'].replace('{error}', result.error));
+
         }
     })
     .catch(error => {
         console.error('Erreur sauvegarde:', error);
-        alert(`Erreur lors de la sauvegarde : ${error.message}`);
+        alert(t['save_network_error'].replace('{error}', error.message));
     });
 }
 
@@ -53,13 +54,13 @@ function saveSwitch(switchName) {
     .then(response => response.json())
     .then(result => {
         if (result.success) {
-            alert(`✅ ${switchName} sauvegardé !`);
+            alert(t['save_ok'].replace('{field}', switchName));
         } else {
-            alert(`Erreur : ${result.error}`);
+            alert(t['save_error'].replace('{error}', result.error));
         }
     })
     .catch(error => {
         console.error('Erreur sauvegarde:', error);
-        alert(`Erreur lors de la sauvegarde : ${error.message}`);
+        alert(t['save_network_error'].replace('{error}', error.message));
     });
 }

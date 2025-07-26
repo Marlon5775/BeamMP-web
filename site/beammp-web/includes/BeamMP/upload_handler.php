@@ -1,12 +1,21 @@
 <?php
-session_start();
-require_once __DIR__ . '/../../vendor/autoload.php';
+if (!isset($instanceRoot)) {
+    function findInstanceRoot($maxLevels = 5) {
+        $dir = dirname($_SERVER['SCRIPT_FILENAME']);
+        for ($i = 0; $i < $maxLevels; $i++) {
+            if (file_exists($dir . '/bootstrap.php')) return $dir;
+            $parent = dirname($dir);
+            if ($parent === $dir) break;
+            $dir = $parent;
+        }
+        throw new Exception("Instance root (bootstrap.php) not found");
+    }
+    $instanceRoot = findInstanceRoot(5);
+    require_once $instanceRoot . '/bootstrap.php';
+}
+
 require_once __DIR__ . '/../db.php';
 require_once __DIR__ . '/../../includes/roles.php';
-
-// Chargement des variables d’environnement
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
-$dotenv->load();
 
 // Chargement de la langue et des traductions
 $supported_langs = ['fr', 'en', 'de'];
@@ -40,9 +49,11 @@ function handleUpload() {
 
     if (empty($type) || empty($name)) throw new Exception(t("error_missing_type_or_name"));
 
-    $uploadDir = __DIR__ . '/../../assets/uploads/BeamMP/TEMP/';
-    $imagePath = __DIR__ . "/../../assets/images/BeamMP/images/{$nameSanitized}.jpg";
+    $dataPath = $_ENV['DATA_PATH'] ?? '/var/www/beammp-web/DATA';
+    $uploadDir = $dataPath . '/uploads/';
+    $imagePath = $dataPath . "/images/{$nameSanitized}.jpg";
     $zipPath = "{$uploadDir}{$nameSanitized}.zip";
+
 
     // Description : détection de la langue et génération JSON
     function detectLang($text) {
@@ -62,7 +73,7 @@ function handleUpload() {
         'fr' => $lang === 'fr' ? $descriptionContent : '',
         'en' => $lang === 'en' ? $descriptionContent : ''
     ];
-    $descriptionJsonFile = __DIR__ . "/../../assets/fichiers/BeamMP/descriptions/{$nameSanitized}.json";
+    $descriptionJsonFile = $dataPath . "/descriptions/{$nameSanitized}.json";
     file_put_contents($descriptionJsonFile, json_encode($descriptionJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
     chmod($descriptionJsonFile, 0770);
 
@@ -96,7 +107,8 @@ function handleUpload() {
     }
 
     // Insertion SQL
-    $stmt = $pdo->prepare("INSERT INTO beammp (nom, description, type, chemin, image, id_map, mod_actif, map_officielle, map_active, vehicule_type, archive, link, date)
+    $table = $_ENV['BEAMMP_TABLE'] ?? 'beammp';
+    $stmt = $pdo->prepare("INSERT INTO $table (nom, description, type, chemin, image, id_map, mod_actif, map_officielle, map_active, vehicule_type, archive, link, date)
                            VALUES (:nom, :description, :type, :chemin, :image, :id_map, :mod_actif, :map_officielle, :map_active, :vehicule_type, :archive, :link, NOW())");
 
     $stmt->execute([
@@ -114,8 +126,9 @@ function handleUpload() {
         ':link' => $link
     ]);
 
-    $baseUrl = $_ENV['BASE_URL'];
-    $imageUrl = "{$baseUrl}/assets/images/BeamMP/images/{$nameSanitized}.jpg";
+    $baseUrl = rtrim($_ENV['BASE_URL'] ?? '', '/');
+    $imageUrl = "{$baseUrl}/DATA/images/{$nameSanitized}.jpg";
+
 
     sendWebhookDiscord($name, $descriptionContent, $type, $imageUrl);
 

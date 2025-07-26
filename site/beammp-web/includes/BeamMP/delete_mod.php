@@ -1,7 +1,20 @@
 <?php
-session_start();
+if (!isset($instanceRoot)) {
+    function findInstanceRoot($maxLevels = 5) {
+        $dir = dirname($_SERVER['SCRIPT_FILENAME']);
+        for ($i = 0; $i < $maxLevels; $i++) {
+            if (file_exists($dir . '/bootstrap.php')) return $dir;
+            $parent = dirname($dir);
+            if ($parent === $dir) break;
+            $dir = $parent;
+        }
+        throw new Exception("Instance root (bootstrap.php) not found");
+    }
+    $instanceRoot = findInstanceRoot(5);
+    require_once $instanceRoot . '/bootstrap.php';
+}
+
 require_once __DIR__ . '/../../includes/roles.php';
-require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../includes/db.php';
 
 header('Content-Type: application/json');
@@ -10,9 +23,6 @@ if (!isset($_SESSION['user_id']) || !hasRole(['SuperAdmin', 'Admin'])) {
     http_response_code(403);
     exit(json_encode(['success' => false, 'message' => 'Accès interdit.']));
 }
-
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
-$dotenv->load();
 
 try {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -27,8 +37,8 @@ try {
 
     $modNom = $input['mod_nom'];
     $modType = $input['mod_type'];
-
-    $stmt = $pdo->prepare("SELECT chemin, image, mod_actif, description, map_active FROM beammp WHERE nom = :nom AND type = :type");
+    $table = $_ENV['BEAMMP_TABLE'] ?? 'beammp';
+    $stmt = $pdo->prepare("SELECT chemin, image, mod_actif, description, map_active FROM $table WHERE nom = :nom AND type = :type");
     $stmt->execute([':nom' => $modNom, ':type' => $modType]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -37,7 +47,7 @@ try {
     }
 
     $pathBaseRemove = rtrim($_ENV['PATH_RESOURCES'], '/');
-    $basePath = rtrim($_ENV['BASE_PATH'], '/');
+    $basePath = rtrim($_ENV['DATA_PATH'], '/');
 
     $remoteZipPath = ($modType === "map")
         ? $pathBaseRemove . ($row['map_active'] == 0 ? "/inactive_map/" : "/")
@@ -45,8 +55,8 @@ try {
 
     $remoteZipPath .= $row['chemin'];
 
-    $localImagePath = $basePath . "/assets/images/BeamMP/" . $row['image'];
-    $localDescriptionPath = $basePath . "/assets/fichiers/BeamMP/" . $row['description'];
+    $localImagePath = $basePath . "/images/" . $row['image'];
+    $localDescriptionPath = $basePath . "/descriptions/" . $row['description'];
 
     // Suppression fichier ZIP local
     if (file_exists($remoteZipPath)) {
@@ -63,7 +73,7 @@ try {
     }
 
     // Suppression dans la base
-    $stmt = $pdo->prepare("DELETE FROM beammp WHERE nom = :nom AND type = :type");
+    $stmt = $pdo->prepare("DELETE FROM $table WHERE nom = :nom AND type = :type");
     $stmt->execute([':nom' => $modNom, ':type' => $modType]);
 
     echo json_encode(['success' => true]);

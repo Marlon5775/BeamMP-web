@@ -1,0 +1,19 @@
+{
+  "db_user": "user_db",
+  "db_pass": "password_db",
+  "user_system": "user_system",
+  "lang": "en",
+  "ip": "192.168.x.xxx",
+  "instances": [
+    {
+        "name": "instance_name_1",
+        "port": "8081",
+        "root_beammp": "/home/beammp/server1/BeamMP-Server"
+    },
+    {
+        "name": "instance_name_2",
+        "port": "8082",
+        "root_beammp": "/home/beammp/server2/BeamMP-Server"
+    }
+  ]
+}

@@ -1,7 +1,19 @@
 <?php
-session_start();
+if (!isset($instanceRoot)) {
+    function findInstanceRoot($maxLevels = 5) {
+        $dir = dirname($_SERVER['SCRIPT_FILENAME']);
+        for ($i = 0; $i < $maxLevels; $i++) {
+            if (file_exists($dir . '/bootstrap.php')) return $dir;
+            $parent = dirname($dir);
+            if ($parent === $dir) break;
+            $dir = $parent;
+        }
+        throw new Exception("Instance root (bootstrap.php) not found");
+    }
+    $instanceRoot = findInstanceRoot(5);
+    require_once $instanceRoot . '/bootstrap.php';
+}
 
-require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../includes/roles.php';
 require_once __DIR__ . '/../../includes/db.php';
 require_once __DIR__ . '/../../includes/BeamMP/i18n.php';
@@ -12,41 +24,32 @@ if (!isset($_SESSION['user_id']) || !hasRole(['SuperAdmin', 'Admin'])) {
     exit('Accès interdit.');
 }
 
-// Chargement des variables d’environnement (optionnel ici si déjà fait dans i18n)
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
-$dotenv->load();
-
 // Récupération des variables d’environnement
 $webhookUrl = $_ENV['DISCORD_WEBHOOK_SERVER_RESTART'] ?? '';
 $baseUrl = rtrim($_ENV['BASE_URL'] ?? '', '/');
-
-if (!isset($_SESSION['user_id']) || !hasRole(['SuperAdmin', 'Admin'])) {
-    http_response_code(403);
-    exit('Accès interdit.');
-}
-
-$webhookUrl = $_ENV['DISCORD_WEBHOOK_SERVER_RESTART'] ?? '';
-$baseUrl = rtrim($_ENV['BASE_URL'] ?? '', '/');
+$dataPath = rtrim($_ENV['DATA_PATH'], '/');
 
 try {
-    exec('sudo systemctl restart BeamMP.service && sudo systemctl restart joueurs.service', $output, $return_var);
+    $beammpService = $_ENV['BEAMMP_SERVICE'] ?? 'beammp.service';
+    $playersService = $_ENV['PLAYERS_SERVICE'] ?? 'players.service';
+    exec("sudo systemctl restart {$beammpService} && sudo systemctl restart {$playersService}", $output, $return_var);
 
     if ($return_var === 0) {
         global $pdo;
-
-        $stmt = $pdo->prepare("SELECT nom, image FROM beammp WHERE map_active=1 LIMIT 1");
+        $table = $_ENV['BEAMMP_TABLE'] ?? 'beammp';
+        $stmt = $pdo->prepare("SELECT nom, image FROM $table WHERE map_active=1 LIMIT 1");
         $stmt->execute();
         $mapData = $stmt->fetch();
         $activeMap = $mapData['nom'] ?? 'Aucune map active';
         $mapImageUrl = isset($mapData['image']) && !empty($baseUrl)
-            ? $baseUrl . "/assets/images/BeamMP/" . $mapData['image']
+            ? $baseUrl . $dataPath . "/images/" . $mapData['image']
             : null;
 
-        $stmt = $pdo->prepare("SELECT nom FROM beammp WHERE mod_actif=1 AND type='vehicule'");
+        $stmt = $pdo->prepare("SELECT nom FROM $table WHERE mod_actif=1 AND type='vehicule'");
         $stmt->execute();
         $vehicles = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-        $stmt = $pdo->prepare("SELECT COUNT(*) as mod_count FROM beammp WHERE mod_actif=1 AND type='mod'");
+        $stmt = $pdo->prepare("SELECT COUNT(*) as mod_count FROM $table WHERE mod_actif=1 AND type='mod'");
         $stmt->execute();
         $modCount = $stmt->fetchColumn();
 

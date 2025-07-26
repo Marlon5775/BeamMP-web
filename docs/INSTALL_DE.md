@@ -1,242 +1,125 @@
-# 📦 Installation von BeamMP-web + Bot + Skripte (Apache + MariaDB)
+# 🚀 Automatische Installation von BeamMP-Web (Multi-Instance)
 
-Diese Anleitung führt Sie Schritt für Schritt durch die Installation des BeamMP-web-Projekts (Serververwaltungsoberfläche + Discord-Bot + Synchronisierungsskripte) auf einem Debian/Ubuntu-Server mit Apache und MariaDB.
+> Installieren Sie BeamMP-Web, die Weboberfläche, den Discord-Bot und die Multi-Server-Verwaltung in wenigen Minuten auf einer Linux-Umgebung.
+>
+> ✅ Kompatibel (getestet): Debian 12 AMD64.
 
----
-
-
-## 1️⃣ Voraussetzungen
-
-```bash
-sudo apt update && sudo apt install -y \
-  apache2 mariadb-server php php-mysql php-curl php-xml php-mbstring \
-  unzip curl git composer
-```
+> **Nativ integrierte Multi-Instance-Unterstützung** (zentrale Verwaltung, Admin-Konten, Sicherheit).
 
 ---
 
-## 2️⃣ Repository klonen
+## 1️⃣ Systemvoraussetzungen
+
+Verwenden Sie einen dedizierten Systembenutzer für BeamMP-Server:
 
 ```bash
-git clone https://github.com/Zyphro3D/BeamMP-web.git
-cd BeamMP-web
+sudo usermod -aG sudo Ihr_Benutzer
 ```
 
----
-
-## 3️⃣ Website einrichten
-
-### Dateien verlinken und Abhängigkeiten installieren
-
-Erstelle einen symbolischen Link von `site/beammp-web` nach `/var/www/beammp-web` und installiere dann die PHP-Abhängigkeiten mit Composer:
+Installieren Sie alle Abhängigkeiten:
 
 ```bash
-sudo ln -s ~/BeamMP-web/site/beammp-web /var/www/beammp-web
-cd site/beammp-web
-sudo composer install
-```
-
-### Apache-Seite aktivieren
-
-```bash
-cd ~/BeamMP-web
-sudo cp config/beammp-web.conf /etc/apache2/sites-available/
-sudo a2dissite 000-default.conf  # Falls die Standardseite noch aktiviert ist
-sudo a2ensite beammp-web.conf
-sudo a2enmod rewrite
-sudo systemctl reload apache2
-```
-
-### PHP-Konfiguration
-
-Bearbeite `/etc/php/*/apache2/php.ini` und setze folgende Werte:
-
-```ini
-upload_max_filesize = 10G
-post_max_size = 10G
-max_input_time = 300
-max_execution_time = 300
-memory_limit = 256M
-```
-
-Starte dann Apache neu:
-
-```bash
-sudo systemctl restart apache2
+apache2 mariadb-server php php-mysql php-curl php-xml php-mbstring python3 python3-venv python3-pip unzip curl git composer jq
 ```
 
 ---
 
-## 4️⃣ Datenbank einrichten
+## 2️⃣ SQL-Benutzer erstellen
 
-### MariaDB absichern
-
-```bash
-sudo mysql_secure_installation  # Den Anweisungen folgen
-```
-
-### Schema importieren und Benutzer anlegen
+Verbinden Sie sich mit MariaDB:
 
 ```bash
-sudo mysql -u root -p < sql/beammp_db.sql
-sudo mysql -u root -p
+sudo mysql
 ```
 
-Im MariaDB-Terminal:
+Geben Sie dann Folgendes ein (passen Sie `user_db` und `password_db` an):
 
 ```sql
-CREATE USER 'BENUTZER'@'localhost' IDENTIFIED BY 'PASSWORT';  -- BENUTZER und PASSWORT ersetzen
-GRANT ALL PRIVILEGES ON beammp_db.beammp TO 'BENUTZER'@'localhost';
-GRANT ALL PRIVILEGES ON beammp_db.beammp_users TO 'BENUTZER'@'localhost';
-GRANT ALL PRIVILEGES ON beammp_db.users TO 'BENUTZER'@'localhost';
+CREATE USER 'user_db'@'localhost' IDENTIFIED BY 'password_db';
+GRANT CREATE ON *.* TO 'user_db'@'localhost';
+GRANT ALL PRIVILEGES ON beammp_db.* TO 'user_db'@'localhost';
 FLUSH PRIVILEGES;
 EXIT;
 ```
 
 ---
 
-## 🗞️ `.env`-Datei (Anwendungskonfiguration)
+## 3️⃣ Projekt klonen und konfigurieren
 
-Erstelle oder bearbeite `/var/www/beammp-web/.env`:
+Klonen Sie das Repository und bearbeiten Sie die Konfiguration:
 
 ```bash
-sudo nano /var/www/beammp-web/.env
+git clone https://github.com/Zyphro3D/BeamMP-web.git
+cd BeamMP-web
 ```
 
-Hier ist die Vorlage:
+Bearbeiten Sie die Datei `install_config.json` und tragen Sie Ihre Werte ein:
+```bash
+nano install_config.json
+```
 
-```dotenv
-# Lokale Datenbank
-DB_HOST=localhost
-DB_NAME=beammp_db
-DB_USER=xxxxxx  # Ersetzen durch den DB-Benutzer
-DB_PASSWORD=xxxxxx  # Ersetzen durch das DB-Passwort
+**Beispiel für eine `install_config.json`:**
 
-# Remote-Konfigurationspfade
-CONFIG_REMOTE_PATH=/home/xxxxxxx/BeamMP-Server/bin/ServerConfig.toml  # Ersetze xxxxxx durch deinen Systembenutzernamen
-LOG_FILE_PATH=/home/xxxxxxx/BeamMP-Server/bin/Server.log
-USER_CHANGE=www-data
-
-# Pfade
-BEAMMP_FOLDER=/home/xxxxxxx/BeamMP-Server/bin/Resources/
-PATH_RESOURCES=/home/xxxxxxx/BeamMP-Server/bin/Resources/
-BASE_PATH=/var/www/beammp-web
-SERVERCONFIG_PATH=/home/xxxxxxx/BeamMP-Server/bin/ServerConfig.toml
-
-# Discord Webhooks
-DISCORD_WEBHOOK_MOD_UPLOAD=https://discord.com/api/webhooks/xxxx  # Ersetze durch Upload-Webhook
-DISCORD_WEBHOOK_SERVER_RESTART=https://discord.com/api/webhooks/xxxx  # Ersetze durch Server-Info-Webhook
-
-# Sonstiges
-BASE_URL=http://192.xxx.xxx.xxx  # Ersetze durch deine IP
-LANG_DEFAULT=fr  # oder 'en' für Englisch oder 'de' für Deutsch
+```json
+{
+  "db_user": "user_db",
+  "db_pass": "password_db",
+  "user_system": "Ihr_Benutzer",
+  "lang": "de",
+  "ip": "192.168.XX.XXX",
+  "instances": [
+    {
+      "name": "Instanz 1",
+      "port": "8081",
+      "root_beammp": "/pfad/zu/BeamMP-Server1"
+    },
+    {
+      "name": "Instanz 2",
+      "port": "8082",
+      "root_beammp": "/pfad/zu/BeamMP-Server2"
+    }
+  ]
+}
 ```
 
 ---
 
-## 5️⃣ Discord-Bot
-
-### Verschieben und konfigurieren
+## 4️⃣ Automatisches Installationsskript starten
 
 ```bash
-cp -R bot ~/ 
-nano ~/bot/config.json
+chmod +x Install.sh
+sudo ./Install.sh
 ```
 
-Konfiguriere:
-
-* Datenbank-Zugangsdaten
-* Discord-Webhook für Benutzerverfolgung
+**Während der Installation:**
+- Sie werden gefragt, ob Sie die Rechte automatisch setzen möchten oder lieber manuell:
+  > *Sicherheit: Im professionellen/empfindlichen Umfeld lieber manuell, für VM/Tests schnell automatisch.*
+- Benutzername, Passwort und Rolle:
+  - **Admin**: alles außer `ServerConfig.toml`
+  - **SuperAdmin**: Vollzugriff
 
 ---
 
-## 6️⃣ Skripte
+## 5️⃣ Zugriff, Status & Wartung
 
-### Verschieben und konfigurieren
-
-```bash
-cp -R scripts ~/ 
-nano ~/scripts/config.json
-```
-
-Dann ausführen:
-
-```bash
-php ~/scripts/create_user.sh
-```
-
----
-
-## 7️⃣ Ordner für inaktive Mods/Maps erstellen
-
-```bash
-mkdir -p ~/BeamMP-Server/bin/Resources/inactive_map
-mkdir -p ~/BeamMP-Server/bin/Resources/inactive_mod
-```
+- **Dienste prüfen:**
+  ```bash
+  sudo systemctl status beammp-[name].service players-[name].service
+  ```
+- **Webzugriff:**
+  ```
+  http://192.168.X.XXX:8081
+  http://192.168.X.XXX:8082
+  ```
+- **Logs:**
+  ```bash
+  sudo journalctl -u beammp-[name].service
+  sudo journalctl -u players-[name].service
+  ```
+- **Wichtig:**
+  - Tragen Sie die Discord Webhooks in `.env` und `config.json` jeder Instanz ein.
 
 ---
 
-## 8️⃣ Unix-Berechtigungen
-
-### Apache-Gruppenzugriff
-
-```bash
-sudo adduser www-data BENUTZER  # Ersetze BENUTZER durch deinen Systembenutzernamen
-```
-
-### Zugriff auf `ServerConfig.toml`
-
-```bash
-sudo chmod g+rx /home/xxxx  # Ersetze durch deinen Benutzernamen
-sudo chmod g+rx /home/xxxx/BeamMP-Server
-sudo chmod g+wx /home/xxxx/BeamMP-Server/bin
-sudo chmod g+rw /home/xxxx/BeamMP-Server/bin/ServerConfig.toml
-```
-
-### Zugriff auf Mod/Map-Ressourcen
-
-```bash
-sudo chmod -R g+w /home/xxxx/BeamMP-Server/bin/Resources/
-sudo chgrp -R www-data /home/xxxx/beammp/BeamMP-Server/bin/Resources/
-sudo chmod g+s /home/xxxx/BeamMP-Server/bin/Resources/
-```
-
----
-
-## 9️⃣ systemd-Dienste
-
-### Konfigurieren und aktivieren
-
-```bash
-sudo cp services/*.service /etc/systemd/system/  # Bearbeite die .service-Dateien für deinen Benutzernamen
-sudo systemctl daemon-reexec
-sudo systemctl daemon-reload
-sudo systemctl enable BeamMP.service joueurs.service
-sudo systemctl start BeamMP.service joueurs.service
-```
-
-### Neustart ohne Passwort erlauben
-
-```bash
-sudo visudo
-```
-
-Füge hinzu:
-
-```
-www-data ALL=NOPASSWD: /bin/systemctl restart BeamMP.service
-www-data ALL=NOPASSWD: /bin/systemctl restart joueurs.service
-```
-
----
-
-## 🔚 Abschließende Schritte
-
-* Website-Zugriff testen
-* Dienststatus prüfen:
-
-```bash
-sudo systemctl status BeamMP.service joueurs.service
-```
-
-🎉 BeamMP-web ist jetzt einsatzbereit!
+Für Fragen oder Probleme:  
+[https://github.com/Zyphro3D/BeamMP-web/issues](https://github.com/Zyphro3D/BeamMP-web/issues)
