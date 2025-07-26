@@ -18,7 +18,7 @@
 - ~~Custom web port selection during setup~~ ✅  
 - ~~Multi-instance support (host several BeamMP-Web panels independently)~~ ✅  
 - ✅ ARM compatibility (Raspberry Pi & ARM servers) – **functional, awaiting feedback**
-
+- Work in progress on a script to automatically insert into the database all mods that are already present on the server.
 ---
 
 ## 🌐 What is BeamMP-Web?
