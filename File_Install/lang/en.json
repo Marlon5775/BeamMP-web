@@ -125,5 +125,21 @@
   "CHOOSE_ACCOUNT_TYPE_2": "1 - Admin",
   "CHOOSE_ACCOUNT_TYPE_3": "2 - SuperAdmin",
   "ACTION_CHMOD_770": "Applying chmod 770 permissions on {dir}",
-  "ACTION_CHOWN": "Changing ownership of {dir} to {user}:www-data"
+  "ACTION_CHOWN": "Changing ownership of {dir} to {user}:www-data",
+  "none": "test en cours",
+  "start_scan": "🔍 Starting automatic analysis of .zip files...",
+  "ask_nom": "What name should be displayed on the website? (letters, numbers, space, _ and . allowed) : ",
+  "warn_nom_requis": "⚠️ Name is required.",
+  "warn_nom_invalid": "❌ Invalid name. Use only letters, numbers, space, '_' and '.'.",
+  "ask_type": "Type not automatically detected. Enter: 1 = vehicle, 2 = mod, 3 = I don't know.",
+  "ask_desc": "Description (optional, leave blank if nothing to say) : ",
+  "ask_actif": "Active on server? (1 = yes / 0 = no) : ",
+  "detecting": "📦 Analyzing: ",
+  "ok_desc": "✅ Description created: {path}",
+  "error_desc": "❌ Error writing description: {error}",
+  "error_move": "❌ Error moving ZIP: {error}",
+  "ok_import": "✅ Imported mod: {name}",
+  "error_sql": "❌ SQL Error: {error}",
+  "missing_images": "📸 Images to place manually in the /images/ folder:",
+  "all_done": "✅ Analysis and import completed for all instances."
 }

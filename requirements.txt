@@ -2,3 +2,4 @@ bcrypt
 PyMySQL
 pyinstaller
 pyyaml
+mysql-connector-python
