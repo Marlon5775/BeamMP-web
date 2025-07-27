@@ -123,5 +123,7 @@
   "OK_APACHE_RESTARTED": "[OK] Apache-Dienst wurde neu gestartet.",
   "CHOOSE_ACCOUNT_TYPE_1": "Kontotyp:",
   "CHOOSE_ACCOUNT_TYPE_2": "1 - Admin",
-  "CHOOSE_ACCOUNT_TYPE_3": "2 - SuperAdmin"
+  "CHOOSE_ACCOUNT_TYPE_3": "2 - SuperAdmin",
+  "ACTION_CHMOD_770": "Setze Berechtigungen chmod 770 auf {dir}",
+  "ACTION_CHOWN": "Ändere Eigentümer von {dir} zu {user}:www-data"
 }

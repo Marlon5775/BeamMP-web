@@ -130,5 +130,8 @@
   "skip_missing_dir": "⏭️ Dossier introuvable : {dir}",
   "db_error": "❌ Erreur de base de données pour l'instance {name} : {error}",
   "yaml_created": "📁 Fichier to_import_{name}.yaml généré avec {count} mod(s) orphelin(s).",
-  "no_orphan_found": "👌 Aucun mod orphelin trouvé pour l'instance {name}."
+  "no_orphan_found": "👌 Aucun mod orphelin trouvé pour l'instance {name}.",
+  "ACTION_CHMOD_770": "Application des droits chmod 770 sur {dir}",
+  "ACTION_CHOWN": "Changement propriétaire de {dir} vers {user}:www-data"
 }
+

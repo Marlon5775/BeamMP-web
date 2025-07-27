@@ -395,6 +395,20 @@ def admin_user_creation(config):
     if voir == "1":
         print(tr("YOUR_PASSWORD", pwd=pwd1))
 
+# === Modification droit et propriaitaire inactive_map et invactive_mod ===
+def fix_inactive_dirs_permissions(config):
+    """Corrige les droits sur inactive_map et inactive_mod pour chaque instance."""
+    user_system = config.get("user_system", "beammp")
+    for inst in config.get("instances", []):
+        rb = inst["root_beammp"]
+        for subdir in ("inactive_map", "inactive_mod"):
+            path = os.path.join(rb, "bin", "Resources", subdir)
+            if os.path.isdir(path):
+                print(tr("ACTION_CHMOD_770", dir=path))
+                os.system(f"chmod -R 770 '{path}'")
+                print(tr("ACTION_CHOWN", dir=path, user=user_system))
+                os.system(f"chown -R {user_system}:www-data '{path}'")
+
 # === MAIN ===
 if __name__ == "__main__":
     if os.geteuid() != 0:
@@ -417,3 +431,5 @@ if __name__ == "__main__":
     group_write_permissions(config)
     # 6. Creation user admin
     admin_user_creation(config)
+    # 7. Modification droit inactive_map inactive_mod
+    fixe_inactive_dirs_permissions(config)
