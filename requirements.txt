@@ -1,3 +1,4 @@
 bcrypt
 PyMySQL
 pyinstaller
+pyyaml

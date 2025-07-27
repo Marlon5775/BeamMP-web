@@ -124,5 +124,11 @@
   "CHOOSE_ACCOUNT_TYPE_1": "Type de compte :",
   "CHOOSE_ACCOUNT_TYPE_2": "1 - Admin",
   "CHOOSE_ACCOUNT_TYPE_3": "2 - SuperAdmin",
-
+  "vide": "vide",
+  "start_scan": "🔍 Début du scan des mods orphelins...",
+  "end_scan": "✅ Scan terminé.",
+  "skip_missing_dir": "⏭️ Dossier introuvable : {dir}",
+  "db_error": "❌ Erreur de base de données pour l'instance {name} : {error}",
+  "yaml_created": "📁 Fichier to_import_{name}.yaml généré avec {count} mod(s) orphelin(s).",
+  "no_orphan_found": "👌 Aucun mod orphelin trouvé pour l'instance {name}."
 }
