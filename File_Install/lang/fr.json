@@ -141,6 +141,12 @@
   "ok_import": "✅ Mod importé : {name}",
   "error_sql": "❌ Erreur SQL : {error}",
   "missing_images": "📸 Images à déposer manuellement dans le dossier /images/ :",
-  "all_done": "✅ Analyse et import terminés pour toutes les instances."
+  "all_done": "✅ Analyse et import terminés pour toutes les instances.",
+  "STEP_5": "Création du fichier de mods à importer",
+  "OK_STEP5": "Script set_5_create_file_to_import_mods.py exécuté avec succès",
+  "ERROR_SCRIPT5": "Erreur lors de l'exécution du script 5",
+  "INSTALL_DONE": "Installation terminée !",
+  "INSTALL_NOTE": "Vous pouvez maintenant accéder à l’interface BeamMP-Web.",
+  "ACTION_CHMOD_GW": "Ajout des droits g+w sur {dir}"
 }
 

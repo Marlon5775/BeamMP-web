@@ -409,6 +409,18 @@ def fix_inactive_dirs_permissions(config):
                 print(tr("ACTION_CHOWN", dir=path, user=user_system))
                 os.system(f"chown -R {user_system}:www-data '{path}'")
 
+
+def fix_data_dir_permissions(config):
+    """Ajoute les droits g+w sur les dossiers DATA des sites web."""
+    for inst in config.get("instances", []):
+        name = inst["name"]
+        data_path = f"/var/www/beammpweb-{name}/DATA"
+        if os.path.isdir(data_path):
+            print(tr("ACTION_CHMOD_GW", dir=data_path))
+            os.system(f"chmod -R g+w '{data_path}'")
+        else:
+            print(tr("WARN_DIR_MISSING", path=data_path))
+
 # === MAIN ===
 if __name__ == "__main__":
     if os.geteuid() != 0:
@@ -432,4 +444,6 @@ if __name__ == "__main__":
     # 6. Creation user admin
     admin_user_creation(config)
     # 7. Modification droit inactive_map inactive_mod
-    fixe_inactive_dirs_permissions(config)
+    fix_inactive_dirs_permissions(config)
+    # 8. Ajout droits g+w sur DATA/
+    fix_data_dir_permissions(config)

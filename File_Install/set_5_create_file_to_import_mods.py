@@ -68,20 +68,8 @@ def extract_map_description(zip_path, id_map):
     except:
         return ""
 
-def get_map_active(root_beammp, id_map):
-    try:
-        with open(os.path.join(root_beammp, "bin/ServerConfig.json"), encoding="utf-8") as f:
-            content = f.read()
-            return f"/levels/{id_map}/info.json" in content
-    except:
-        return False
-
 def sanitize_filename(n):
     return re.sub(r"[^a-zA-Z0-9\-_]", "_", n)
-
-# UID/GID www-data
-uid_www = pwd.getpwnam("www-data").pw_uid
-gid_www = grp.getgrnam("www-data").gr_gid
 
 print(msg("start_scan"))
 
@@ -101,6 +89,26 @@ for instance_conf in config["instances"]:
     images_attendues = []
     to_review = []
     log = []
+
+    # === Lire ServerConfig.toml pour détecter la map active ===
+    id_map_active = None
+    server_config_path = os.path.join(root, "bin", "ServerConfig.toml")
+    try:
+        if os.path.isfile(server_config_path):
+            with open(server_config_path, "r") as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith("Map") and "/levels/" in line and "/info.json" in line:
+                        start = line.find("/levels/") + len("/levels/")
+                        end = line.find("/info.json")
+                        id_map_active = line[start:end].strip()
+                        break
+        if id_map_active:
+            log.append(f"🔍 Map active détectée dans ServerConfig.toml : {id_map_active}")
+        else:
+            log.append("⚠️ Aucune map active détectée dans ServerConfig.toml")
+    except Exception as e:
+        log.append(f"⚠️ Lecture ServerConfig.toml échouée : {e}")
 
     folders = [
         os.path.join(root, "bin/Resources/Client"),
@@ -125,7 +133,6 @@ for instance_conf in config["instances"]:
         if id_map:
             typeval = "map"
             description = extract_map_description(zip_path, id_map)
-            map_active = get_map_active(root, id_map)
             name_input = demander_nom()
             mod_actif = None
         else:
@@ -140,7 +147,6 @@ for instance_conf in config["instances"]:
                 continue
 
             name_input = demander_nom()
-            map_active = None
             id_map = None
             description = input(msg("ask_desc"))
             mod_actif = input(msg("ask_actif"))
@@ -154,9 +160,10 @@ for instance_conf in config["instances"]:
             os.makedirs(chemin_desc, exist_ok=True)
             desc_data = {l: "" for l in ["fr", "en", "de"]}
             desc_data[lang] = description
+
             with open(desc_json_path, "w", encoding="utf-8") as df:
                 json.dump(desc_data, df, indent=2, ensure_ascii=False)
-            os.chown(desc_json_path, uid_www, gid_www)
+
             log.append(msg("ok_desc", path=desc_json_path))
         except Exception as e:
             log.append(msg("error_desc", error=str(e)))
@@ -165,7 +172,7 @@ for instance_conf in config["instances"]:
         # déplacer le zip s'il faut
         target_folder = folders[0]  # par défaut client
         if typeval == "map":
-            target_folder = folders[0] if map_active else folders[2]
+            target_folder = folders[0] if id_map == id_map_active else folders[2]
         elif typeval in ("mod", "vehicule"):
             target_folder = folders[0] if mod_actif == "1" else folders[1]
 
@@ -189,7 +196,7 @@ for instance_conf in config["instances"]:
                 zip_new_name,
                 image_path,
                 id_map,
-                1 if map_active else 0 if map_active is not None else None,
+                1 if id_map == id_map_active else 0,
                 0,
                 int(mod_actif) if mod_actif else None,
                 "",
@@ -198,6 +205,23 @@ for instance_conf in config["instances"]:
             cursor.execute(sql, values)
             conn.commit()
             log.append(msg("ok_import", name=name_input))
+
+            # Mise à jour map_active dans la base pour correspondre au ServerConfig.toml
+            if typeval == "map" and id_map_active:
+                try:
+                    cursor.execute(f"""
+                        UPDATE `{table_name}`
+                        SET map_active = CASE
+                            WHEN id_map = %s THEN 1
+                            ELSE 0
+                        END
+                        WHERE type = 'map'
+                    """, (id_map_active,))
+                    conn.commit()
+                    log.append(f"🗺️ map_active mis à jour dans la base : {id_map_active}")
+                except Exception as e:
+                    log.append(msg("error_sql", error="update map_active: " + str(e)))
+
             images_attendues.append(f"{name_sanitized}.jpg")
         except Exception as e:
             log.append(msg("error_sql", error=str(e)))

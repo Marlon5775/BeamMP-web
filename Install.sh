@@ -9,6 +9,15 @@ INSTALL_DIR="$(pwd)/File_Install"
 VENV_DIR="$(pwd)/.venv"
 CONFIG_FILE="./install_config.json"
 
+# Détection utilisateur réel (non-root)
+if [ -n "$SUDO_USER" ]; then
+  REAL_USER="$SUDO_USER"
+else
+  echo "[ERREUR] Impossible de détecter l'utilisateur non-root. Lancez le script avec sudo." >&2
+  exit 99
+fi
+
+
 # Vérifie jq installé
 if ! command -v jq &>/dev/null; then
   echo "[ERREUR] jq est requis. Lance : sudo apt install jq" >&2
@@ -130,6 +139,16 @@ ok "OK_STEP4"
 step "RESTART_APACHE"
 systemctl restart apache2
 ok "OK_APACHE_RESTARTED"
+
+# Étape 5 : Création fichier de mods à importer
+step "STEP_5"
+if [ ! -f "$INSTALL_DIR/set_5_create_file_to_import_mods.py" ]; then
+    err "ERROR_MISSING_SCRIPT"
+fi
+
+sudo -u "$REAL_USER" "$VENV_DIR/bin/python" "$INSTALL_DIR/set_5_create_file_to_import_mods.py"
+ok "OK_STEP5"
+
 
 echo -e "\n\033[1;32m--- $(t "INSTALL_DONE") ---\033[0m"
 echo "$(t "INSTALL_NOTE")"
