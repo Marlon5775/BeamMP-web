@@ -28,8 +28,8 @@ $isAdmin = hasRole(['SuperAdmin', 'Admin']);
 $title = 'BeamMP';
 $h1Title = $_ENV['TITLE'] ?? 'BeamMP';
 $buttons = [
-    ['link' => '/Upload', 'title' => t('btn_add_mod'), 'icon' => '/assets/images/ADD.png'],
-    ['link' => '/Admin', 'title' => t('btn_logs'), 'icon' => '/assets/images/LOG.png'],
+    ['link' => '/Upload', 'title' => t('btn_add_mod'), 'icon' => '/assets/images/ADD.webp'],
+    ['link' => '/Admin', 'title' => t('btn_logs'), 'icon' => '/assets/images/LOG.webp'],
 ];
 ?>
 <!DOCTYPE html>

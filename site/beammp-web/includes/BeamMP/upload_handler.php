@@ -51,7 +51,7 @@ function handleUpload() {
 
     $dataPath = $_ENV['DATA_PATH'] ?? '/var/www/beammp-web/DATA';
     $uploadDir = $dataPath . '/uploads/';
-    $imagePath = $dataPath . "/images/{$nameSanitized}.jpg";
+    $imagePath = $dataPath . "/images/{$nameSanitized}.webp";
     $zipPath = "{$uploadDir}{$nameSanitized}.zip";
 
 
@@ -81,10 +81,27 @@ function handleUpload() {
     if (!empty($_FILES['image']['name'])) {
         $imageTmp = $_FILES['image']['tmp_name'];
         if (move_uploaded_file($imageTmp, $imagePath)) {
+            // Conversion vers WebP
+            $info = getimagesize($imagePath);
+            if ($info['mime'] === 'image/jpeg') {
+                $img = imagecreatefromjpeg($imagePath);
+            } elseif ($info['mime'] === 'image/png') {
+                $img = imagecreatefrompng($imagePath);
+                imagepalettetotruecolor($img);
+                imagealphablending($img, true);
+                imagesavealpha($img, true);
+            } else {
+                unlink($imagePath);
+                throw new Exception(t("error_invalid_format"));
+            }
+
+            imagewebp($img, $imagePath, 80); // remplace le fichier par du .webp
+            imagedestroy($img);
             chmod($imagePath, 0770);
         } else {
             throw new Exception(t("error_image_upload"));
         }
+
     } else {
         throw new Exception(t("error_image_required"));
     }
@@ -116,7 +133,7 @@ function handleUpload() {
         ':description' => "descriptions/{$nameSanitized}.json",
         ':type' => $type,
         ':chemin' => "{$nameSanitized}.zip",
-        ':image' => "images/{$nameSanitized}.jpg",
+        ':image' => "images/{$nameSanitized}.webp",
         ':id_map' => $type === "map" ? $id_map : null,
         ':mod_actif' => $mod_actif,
         ':map_officielle' => $type === "map" ? 0 : null,
@@ -127,7 +144,7 @@ function handleUpload() {
     ]);
 
     $baseUrl = rtrim($_ENV['BASE_URL'] ?? '', '/');
-    $imageUrl = "{$baseUrl}/DATA/images/{$nameSanitized}.jpg";
+    $imageUrl = "{$baseUrl}/DATA/images/{$nameSanitized}.webp";
 
 
     sendWebhookDiscord($name, $descriptionContent, $type, $imageUrl);

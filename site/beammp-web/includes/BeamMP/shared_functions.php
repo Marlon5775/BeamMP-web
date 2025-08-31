@@ -13,7 +13,7 @@ function buildImagePath($image) {
     // Chemin web accessible par le navigateur
     $webPath  = '/DATA/images/' . $image;
 
-    return file_exists($diskPath) ? $webPath : '/assets/images/no_image.png';
+    return file_exists($diskPath) ? $webPath : '/assets/images/no_image.webp';
 }
 // Fonction pour récupérer le contenu d'un fichier description
 function getDescriptionContent($descriptionPath) {
@@ -116,7 +116,7 @@ function getActiveMap() {
         return [
             'nom' => 'Aucune carte active',
             'description' => 'Aucune description disponible.',
-            'image' => 'assets/images/default_map.png'
+            'image' => 'assets/images/default_map.webp'
         ];
     }
 

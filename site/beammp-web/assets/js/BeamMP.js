@@ -67,7 +67,7 @@ function loadMaps(mapType = 'all') {
                 mapItem.innerHTML = `
                     <div class="mapactive-box">
                         <div class="mapactive-image-container">
-                            <img src="${map.image || '/assets/images/no_image.png'}" alt="${map.nom}">
+                            <img src="${map.image || '/assets/images/no_image.webp'}" alt="${map.nom}">
                         </div>
                         <div class="mapactive-info-container">
                             <h3>${map.nom}</h3>

@@ -30,7 +30,7 @@ $canViewLogs = hasRole(['SuperAdmin', 'Admin']);
 $title = 'Admin';
 $h1Title = $_ENV['TITLE'] ?? 'BeamMP';
 $buttons = [
-    ['link' => '/BeamMP', 'title' => t('btn_back'), 'icon' => '/assets/images/BACK.png']
+    ['link' => '/BeamMP', 'title' => t('btn_back'), 'icon' => '/assets/images/BACK.webp']
 ];
 
 // Lecture du fichier .env (déjà chargé dans i18n.php)
