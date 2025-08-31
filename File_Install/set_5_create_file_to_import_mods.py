@@ -153,7 +153,7 @@ for instance_conf in config["instances"]:
 
         name_sanitized = sanitize_filename(name_input)
         zip_new_name = f"{name_sanitized}.zip"
-        image_path = f"images/{name_sanitized}.jpg"
+        image_path = f"images/{name_sanitized}.webp"
         desc_json_path = os.path.join(chemin_desc, f"{name_sanitized}.json")
 
         try:
@@ -222,7 +222,7 @@ for instance_conf in config["instances"]:
                 except Exception as e:
                     log.append(msg("error_sql", error="update map_active: " + str(e)))
 
-            images_attendues.append(f"{name_sanitized}.jpg")
+            images_attendues.append(f"{name_sanitized}.webp")
         except Exception as e:
             log.append(msg("error_sql", error=str(e)))
 

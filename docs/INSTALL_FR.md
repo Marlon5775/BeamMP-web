@@ -20,7 +20,7 @@ sudo usermod -aG sudo votre_utilisateur
 Installer toutes les dépendances :
 
 ```bash
-apache2 mariadb-server php php-mysql php-curl php-xml php-mbstring python3 python3-venv python3-pip unzip curl git composer jq
+apache2 mariadb-server php php-mysql php-curl php-xml php-mbstring python3 python3-venv python3-pip unzip curl git composer jq php-gd libwebp-dev
 ```
 
 ---
