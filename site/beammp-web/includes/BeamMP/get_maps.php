@@ -15,6 +15,5 @@ try {
     http_response_code(500);
     echo json_encode(['error' => $e->getMessage()]);
 }
-error_log("Cartes retournées : " . json_encode($maps));
 
 ?>
