@@ -38,6 +38,19 @@
       "discord_error": "⚠️ Discord Fehler: {status}",
       "discord_fail": "❌ Discord Sende Fehler: {error}",
       "discord_sent": "📨 Benachrichtigung gesendet: {message}"
+    },
+    "es": {
+      "db_ok": "✅ Conexión a la base de datos establecida.",
+      "db_error": "❌ Error de conexión a la base de datos: {error}",
+      "watching_log": "👀 Supervisión de {path} iniciada.",
+      "log_connection": "🟢 Conexión detectada: {username}",
+      "log_disconnection": "🔴 Desconexión detectada: {username}",
+      "user_connected": "{username} se ha conectado al servidor {server_name}.",
+      "user_disconnected": "{username} se ha desconectado del servidor {server_name}.",
+      "session_summary": "{username} se ha desconectado. Tiempo de sesión: {session} | Total: {total}{msg}",
+      "discord_error": "⚠️ Error de Discord: {status}",
+      "discord_fail": "❌ Error al enviar a Discord: {error}",
+      "discord_sent": "📨 Notificación enviada: {message}"
     }
   },
   "connection_count": {
@@ -47,22 +60,29 @@
       "10-99": ["🥈 Niveau Argent {value}/100"],
       "100-499": ["🥇 Niveau Or avec {value}/500 connexions"],
       "500+": ["💎 Niveau Platine ! {value} connexions, c'est du sérieux !"]
-    },
+      },
     "en": {
       "0-1": ["🥚 Welcome to your very first connection!"],
       "2-9": ["🥉 Bronze Level {value}/10"],
       "10-99": ["🥈 Silver Level {value}/100"],
       "100-499": ["🥇 Gold Level with {value}/500 connections"],
       "500+": ["💎 Platinum Level! {value} connections, that's serious!"]
-    },
+      },
     "de": {
       "0-1": ["🥚 Willkommen zu deiner allerersten Verbindung!"],
       "2-9": ["🥉 Bronze Level {value}/10"],
       "10-99": ["🥈 Silber Level {value}/100"],
       "100-499": ["🥇 Gold Level mit {value}/500 Verbindungen"],
       "500+": ["💎 Platin Level! {value} Verbindungen, das ist ernsthaft!"]
-    }
-  },
+      },
+    "es": {
+      "0-1": ["🥚 ¡Bienvenido a tu primera conexión!"],
+      "2-9": ["🥉 Nivel Bronce {value}/10"],
+      "10-99": ["🥈 Nivel Plata {value}/100"],
+      "100-499": ["🥇 Nivel Oro con {value}/500 conexiones"],
+      "500+": ["💎 Nivel Platino! {value} conexiones, ¡Esto ya es serio!"]
+      }
+    },
   "session_duration": {
     "fr": {
       "0-120": ["⚠️ Ça ne fonctionne pas ? Contacte le support admin."]
@@ -72,6 +92,9 @@
     },
     "de": {
       "0-120": ["⚠️ Etwas stimmt nicht? Kontaktiere den Admin-Support."]
+    },
+    "es":{
+      "0-120": ["⚠️ ¿Algo no funciona? Contacta con el soporte del administrador."]
     }
   }
 }
