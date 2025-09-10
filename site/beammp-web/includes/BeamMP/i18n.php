@@ -15,7 +15,7 @@ if (!isset($instanceRoot)) {
 }
 
 // Langues supportées
-$supported_langs = ['fr', 'en', 'de'];
+$supported_langs = ['fr', 'en', 'de', 'es'];
 $defaultLang = $_ENV['LANG_DEFAULT'] ?? 'en';
 
 // Détection navigateur

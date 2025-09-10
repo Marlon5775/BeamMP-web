@@ -3,7 +3,7 @@
 
     <!-- 🔁 Sélecteur de langue -->
     <div class="language-selector">
-        <a href="?lang=fr">🇫🇷 FR</a> | <a href="?lang=en">🇬🇧 EN</a> | <a href="?lang=de">🇩🇪 DE</a>
+        <a href="?lang=fr">🇫🇷 FR</a> | <a href="?lang=en">🇬🇧 EN</a> | <a href="?lang=de">🇩🇪 DE</a> | <a href="?lang=es">🇪🇸 ES</a>
     </div>
 
     <?php if (!empty($buttons) && is_array($buttons)): ?>
